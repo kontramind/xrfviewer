@@ -20,31 +20,9 @@ ApplicationWindow {
         folder: picturesLocation
     }
 
-    header: Button {
-        id: fileButton
-        text: "File"
-        onClicked: menu.open()
-        width: parent.width
-
-        Menu {
-            id: menu
-            MenuItem {
-                text: "Open..."
-                onTriggered: {
-                    fileDialog.open()
-                    frameTimer.running = false;
-                    root.frameCurrentNo = -1
-                    root.frameTotalCount = -1
-                    root.frameFetchDirection = "curr"
-                    root.framePlayPauseAction = "play"
-                    cmdbuttons.focus = true;
-                }
-            }
-        }
-    }
-
     Image {
         id: xrfimg
+        parent: ApplicationWindow.contentItem
         cache: false
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
@@ -57,9 +35,54 @@ ApplicationWindow {
         }
     }
 
+    Rectangle {
+        parent: ApplicationWindow.overlay
+        height: fileButton.height
+        width: ApplicationWindow.contentItem.width
+        color: "lightgray"
+        opacity: 0.5
+
+        Text{
+            text: root.frameCurrentNo + "/" + root.frameTotalCount
+            anchors.fill: parent
+            color: "red"
+            font.bold: true
+            font.pointSize: 12
+            Keys.enabled: false
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+
     footer: RowLayout  {
         id: cmdbuttons
         width: parent.width
+        Button {
+            id: fileButton
+            text: "File"
+            onClicked: menu.open()
+            width: parent.width
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignCenter
+            Keys.enabled: false
+
+            Menu {
+                id: menu
+                MenuItem {
+                    text: "Open..."
+                    onTriggered: {
+                        fileDialog.open()
+                        frameTimer.running = false;
+                        root.frameCurrentNo = -1
+                        root.frameTotalCount = -1
+                        root.frameFetchDirection = "curr"
+                        root.framePlayPauseAction = "play"
+                        cmdbuttons.focus = true;
+                    }
+                }
+            }
+        }
         Button {
             id: prev
             Image {
@@ -108,27 +131,6 @@ ApplicationWindow {
             onClicked: {
                 cmdbuttons.focus = true
                 root.framePlayPauseAction = root.framePlayPauseAction === "play" ? "pause" : "play"
-            }
-        }
-        Rectangle {
-            id: framecounter
-            color: "transparent"
-            border.width: 3
-            border.color: "red"
-            width: play.width
-            height: play.height-10
-            Layout.fillWidth: true
-            //Layout.fillHeight: true
-            Layout.alignment: Qt.AlignCenter
-            Text {
-                text: root.frameCurrentNo + "/" + root.frameTotalCount
-                anchors.fill: framecounter
-                color: "red"
-                font.bold: true
-                font.pointSize: 12
-                Keys.enabled: false
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
             }
         }
 

@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Page1.qml</file>
+        <file>Page1Form.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>icons/movie-play.svg</file>
+        <file>icons/player-back.svg</file>
+        <file>icons/player-next.svg</file>
+        <file>icons/player-pause.svg</file>
+        <file>icons/player-play.svg</file>
+        <file>icons/player-previous.svg</file>
+        <file>icons/player-stop.svg</file>
+        <file>main.cpp</file>
+        <file>icons/movie-next.svg</file>
+        <file>icons/movie-pause.svg</file>
+        <file>icons/movie-prev.svg</file>
+        <file>icons/no_signal.png</file>
+    </qresource>
+</RCC>

@@ -16,5 +16,6 @@
         <file>icons/movie-pause.svg</file>
         <file>icons/movie-prev.svg</file>
         <file>icons/no_signal.png</file>
+        <file>icons/info.svg</file>
     </qresource>
 </RCC>

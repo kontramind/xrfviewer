@@ -45,7 +45,7 @@ ApplicationWindow {
         Text{
             id: headeretxt
             text:
-                "<table border='1'>" +
+                "<table border='1' align='center'>" +
                    "<tr bgcolor='#9acd32'>" +
                    "<td width='50' align='center'>" + root.frameCurrentNo + "</td>" +
                    "<td width='50' align='center'>" + root.frameTotalCount + "</td> </tr>"
@@ -55,8 +55,10 @@ ApplicationWindow {
             font.pointSize: 12
             Keys.enabled: false
             textFormat: Text.RichText
-//            verticalAlignment: Text.AlignVCenter
-//            horizontalAlignment: Text.AlignHCenter
+        }
+        onWidthChanged: {
+            root.frameCurrentNo = root.frameCurrentNo+1
+            root.frameCurrentNo = root.frameCurrentNo-1
         }
     }
 
@@ -188,6 +190,8 @@ ApplicationWindow {
     Component.onCompleted: {
         cmdbuttons.focus = true;
         picturesLocation = contextPicturesLocation;
+        root.frameCurrentNo = 0;
+        root.frameTotalCount = 0;
         console.log("contextPicturesLocation : " + contextPicturesLocation);
     }
 

@@ -206,16 +206,9 @@ ApplicationWindow {
             frameTimer.running = root.framePlayPauseAction === "play" ? false : true
             event.accpted = true;
         }
-        Keys.onLeftPressed: {
-            root.frameFetchDirection = "curr"
-            root.frameFetchDirection = "prev"
-            event.accpted = true;
-        }
-        Keys.onRightPressed: {
-            root.frameFetchDirection = "curr"
-            root.frameFetchDirection = "next"
-            event.accpted = true;
-        }
+        Keys.onLeftPressed: { prev.clicked(); event.accpted = true; }
+        Keys.onRightPressed: { next.clicked(); event.accpted = true; }
+        Keys.onPressed: { if (event.key === Qt.Key_I) info.clicked(); event.accepted = true;}
     }
 
 

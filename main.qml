@@ -36,6 +36,7 @@ ApplicationWindow {
     }
 
     Rectangle {
+        id: hdrrect
         parent: ApplicationWindow.overlay
         height: fileButton.height
         width: ApplicationWindow.contentItem.width
@@ -47,8 +48,8 @@ ApplicationWindow {
             text:
                 "<table border='1' align='center'>" +
                    "<tr bgcolor='#9acd32'>" +
-                   "<td width='50' align='center'>" + root.frameCurrentNo + "</td>" +
-                   "<td width='50' align='center'>" + root.frameTotalCount + "</td> </tr>"
+                   "<td width='50' min-width='50' align='center'>" + root.frameCurrentNo + "</td>" +
+                   "<td width='50' min-width='50' align='center'>" + root.frameTotalCount + "</td> </tr>"
             anchors.fill: parent
             color: "red"
             font.bold: true
@@ -143,6 +144,7 @@ ApplicationWindow {
         }
         Button {
             id: info
+            property bool toggle: true
             Image {
                 id: icon_info
                 anchors.centerIn: parent
@@ -152,9 +154,50 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
             Keys.enabled: false
+
+            Rectangle {
+                id: inforect
+                visible: false
+                parent: ApplicationWindow.overlay
+                width: ApplicationWindow.overlay.width
+                height: ApplicationWindow.contentItem.height
+                color: "lightgrey"
+                opacity: 0.5
+                property bool toggle: false
+
+                Text {
+                    id: infotxt
+                    text: root.frameDcmKeyTagValues
+                    anchors.fill: parent
+                    color: "red"
+                    font.bold: true
+                    font.pointSize: 12
+                    Keys.enabled: false
+                    textFormat: Text.RichText
+                }
+                onWidthChanged: {
+                    var tmp = root.frameDcmKeyTagValues
+                    root.frameDcmKeyTagValues = ""
+                    root.frameDcmKeyTagValues = tmp
+                }
+                onHeightChanged: {
+                    var tmp = root.frameDcmKeyTagValues
+                    root.frameDcmKeyTagValues = ""
+                    root.frameDcmKeyTagValues = tmp
+                }
+            }
+
             onClicked: {
                 cmdbuttons.focus = true
-                console.log("info pressed ...")
+                if(toggle) {
+                    hdrrect.visible = false
+                    inforect.visible = true
+                    toggle = false
+                } else {
+                    hdrrect.visible = true
+                    inforect.visible = false
+                    toggle = true;
+                }
             }
         }
 

@@ -133,6 +133,22 @@ ApplicationWindow {
                 root.framePlayPauseAction = root.framePlayPauseAction === "play" ? "pause" : "play"
             }
         }
+        Button {
+            id: info
+            Image {
+                id: icon_info
+                anchors.centerIn: parent
+                source: "icons/info.svg"
+            }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignCenter
+            Keys.enabled: false
+            onClicked: {
+                cmdbuttons.focus = true
+                console.log("info pressed ...")
+            }
+        }
 
         Keys.onSpacePressed: {
             root.framePlayPauseAction = root.framePlayPauseAction === "play" ? "pause" : "play"

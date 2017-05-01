@@ -43,14 +43,20 @@ ApplicationWindow {
         opacity: 0.5
 
         Text{
-            text: root.frameCurrentNo + "/" + root.frameTotalCount
+            id: headeretxt
+            text:
+                "<table border='1'>" +
+                   "<tr bgcolor='#9acd32'>" +
+                   "<td width='50' align='center'>" + root.frameCurrentNo + "</td>" +
+                   "<td width='50' align='center'>" + root.frameTotalCount + "</td> </tr>"
             anchors.fill: parent
             color: "red"
             font.bold: true
             font.pointSize: 12
             Keys.enabled: false
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+            textFormat: Text.RichText
+//            verticalAlignment: Text.AlignVCenter
+//            horizontalAlignment: Text.AlignHCenter
         }
     }
 
@@ -192,6 +198,7 @@ ApplicationWindow {
     property int frameCurrentNo: -1
     property int frameTotalCount: -1
     property int frameRecommendedDisplayRate: 10
+    property string frameDcmKeyTagValues : ""
     property string frameFetchDirection: "curr"
     property string framePlayPauseAction: "play"
 

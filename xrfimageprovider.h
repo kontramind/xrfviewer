@@ -24,8 +24,11 @@ namespace xrf {
         const int getFrameCount() const;
         const int getCurrFrameNo() const;
         const int getFrameRecommendedDisplayRate() const;
+        const QString getFrameDcmKeyTagValuesAsHtml() const;
+
     protected:
         void forwardCurrentFrameNo() const;
+        void forwardFrameDcmKeyTagValues() const;
 
     private:
         QUrl mUrl {""};

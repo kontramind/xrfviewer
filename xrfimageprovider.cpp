@@ -44,10 +44,12 @@ QString get_frame_direction(const QUrl& loop_url) {
                 else if(frame_direction == "prev")
                     mCurrFrameNo = --mCurrFrameNo < 0 ? getFrameCount() -1 : mCurrFrameNo;
                 forwardCurrentFrameNo();
+                forwardFrameDcmKeyTagValues();
                 return QImage(*mCineLoop->GetFrames()[mCurrFrameNo]);
             }
         }
         forwardCurrentFrameNo();
+        forwardFrameDcmKeyTagValues();
         return QImage(":/icons/no_signal.png");
     }
 
@@ -69,6 +71,14 @@ QString get_frame_direction(const QUrl& loop_url) {
         if(mCineLoop && mCineLoop->IsValid())
             return mCineLoop->GetDcmValues().contains(RECOMMENDED_DISPLAY_FRAME_RATE) ?
                         mCineLoop->GetDcmValues()[RECOMMENDED_DISPLAY_FRAME_RATE].toInt() : 10;
+        return {10};
+    }
+
+    const QString XRFImageProvider::getFrameDcmKeyTagValuesAsHtml() const
+    {
+        if(mCineLoop && mCineLoop->IsValid())
+            return mCineLoop->GetDcmValuesAsHtml();
+        return {""};
     }
 
     void XRFImageProvider::forwardCurrentFrameNo() const
@@ -79,6 +89,16 @@ QString get_frame_direction(const QUrl& loop_url) {
                 rootObject->setProperty("frameCurrentNo", mCurrFrameNo);
                 rootObject->setProperty("frameTotalCount", getFrameCount());
                 rootObject->setProperty("frameRecommendedDisplayRate", getFrameRecommendedDisplayRate());
+            }
+        }
+    }
+
+    void XRFImageProvider::forwardFrameDcmKeyTagValues() const
+    {
+        if(mQmlAppEngine) {
+            if(!mQmlAppEngine->rootObjects().empty()) {
+                auto rootObject = mQmlAppEngine->rootObjects().first();
+                rootObject->setProperty("frameDcmKeyTagValues", getFrameDcmKeyTagValuesAsHtml());
             }
         }
     }

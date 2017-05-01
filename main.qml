@@ -202,12 +202,11 @@ ApplicationWindow {
         }
 
         Keys.onSpacePressed: {
-            root.framePlayPauseAction = root.framePlayPauseAction === "play" ? "pause" : "play"
-            frameTimer.running = root.framePlayPauseAction === "play" ? false : true
-            event.accpted = true;
+            frameTimer.running = !frameTimer.running;
+            event.accepted = true;
         }
-        Keys.onLeftPressed: { prev.clicked(); event.accpted = true; }
-        Keys.onRightPressed: { next.clicked(); event.accpted = true; }
+        Keys.onLeftPressed: { frameTimer.running = false; prev.clicked(); event.accpted = true; }
+        Keys.onRightPressed: { frameTimer.running = false; next.clicked(); event.accpted = true; }
         Keys.onPressed: { if (event.key === Qt.Key_I) info.clicked(); event.accepted = true;}
     }
 

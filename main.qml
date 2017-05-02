@@ -182,7 +182,6 @@ ApplicationWindow {
                     root.frameDcmKeyTagValues = tmp
                 }
             }
-
             onClicked: {
                 cmdbuttons.focus = true
                 if(toggle) {
@@ -203,7 +202,18 @@ ApplicationWindow {
         }
         Keys.onLeftPressed: { frameTimer.running = false; prev.clicked(); event.accpted = true; }
         Keys.onRightPressed: { frameTimer.running = false; next.clicked(); event.accpted = true; }
-        Keys.onPressed: { if (event.key === Qt.Key_I) info.clicked(); event.accepted = true;}
+        Keys.onPressed: {
+            switch(event.key) {
+            case Qt.Key_I:
+                info.clicked();
+                break;
+            case Qt.Key_O:
+                fileButton.clicked();
+                break;
+            default:
+                break;
+            }
+        }
     }
 
 
@@ -212,7 +222,6 @@ ApplicationWindow {
         running: false
         interval: 1000.0/frameRecommendedDisplayRate
         repeat: true
-
         onTriggered: {
             next.clicked()
         }

@@ -68,28 +68,20 @@ ApplicationWindow {
         width: parent.width
         Button {
             id: fileButton
-            text: "File"
-            onClicked: menu.open()
+            text: "Open"
             width: parent.width
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
             Keys.enabled: false
-
-            Menu {
-                id: menu
-                MenuItem {
-                    text: "Open..."
-                    onTriggered: {
-                        fileDialog.open()
-                        frameTimer.running = false;
-                        root.frameCurrentNo = -1
-                        root.frameTotalCount = -1
-                        root.frameFetchDirection = "curr"
-                        root.framePlayPauseAction = "play"
-                        cmdbuttons.focus = true;
-                    }
-                }
+            onClicked: {
+                fileDialog.open()
+                frameTimer.running = false;
+                root.frameCurrentNo = -1
+                root.frameTotalCount = -1
+                root.frameFetchDirection = "curr"
+                root.framePlayPauseAction = "play"
+                cmdbuttons.focus = true;
             }
         }
         Button {

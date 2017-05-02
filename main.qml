@@ -94,6 +94,7 @@ ApplicationWindow {
         }
         Button {
             id: prev
+            visible: false
             Image {
                 id: iconprev
                 anchors.centerIn: parent
@@ -112,6 +113,7 @@ ApplicationWindow {
         }
         Button {
             id: next
+            visible: false
             Image {
                 id: iconnext
                 anchors.centerIn: parent
@@ -128,6 +130,7 @@ ApplicationWindow {
         }
         Button {
             id: play
+            visible: false
             Image {
                 id: icon_play_pause
                 anchors.centerIn: parent
@@ -144,6 +147,7 @@ ApplicationWindow {
         }
         Button {
             id: info
+            visible: false
             property bool toggle: true
             Image {
                 id: icon_info

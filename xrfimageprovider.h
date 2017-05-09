@@ -3,12 +3,17 @@
 
 #include <QFont>
 #include <QImage>
+#include <QDebug>
 #include <QPixmap>
 #include <QString>
 #include <QPainter>
+#include <QQmlEngine>
+#include <QThreadPool>
 #include <QQuickImageProvider>
 
 #include <memory>
+
+#include"xrfcineloopmanager.h"
 
 class QQmlApplicationEngine;
 
@@ -16,28 +21,26 @@ namespace xrf {
 
     class CineLoop;
 
-    class XRFImageProvider : public QQuickImageProvider
+    class ImageProvider : public QObject, public QQuickImageProvider
     {
+        Q_OBJECT
     public:
-        XRFImageProvider(QQmlApplicationEngine* qmlAppEngine);
+        ImageProvider(QQmlApplicationEngine* qmlAppEngine, CineLoopManager* manager);
         QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
-        const int getFrameCount() const;
-        const int getCurrFrameNo() const;
-        const int getFrameRecommendedDisplayRate() const;
         const QString getFrameDcmKeyTagValuesAsHtml() const;
 
-    protected:
-        void forwardCurrentFrameNo() const;
-        void forwardFrameDcmKeyTagValues() const;
+    public slots:
+//        void setCineLoop(CineLoop* loop);
+
 
     private:
-        QUrl mUrl {""};
-        int mCurrFrameNo{-1};
-        QImage mCurrFrame{QImage()};
-        std::unique_ptr<CineLoop> mCineLoop{ nullptr };
+//        QUrl mUrl {""};
+//        int mCurrFrameNo{-1};
+//        QImage mCurrFrame{QImage()};
+        CineLoop* mCineLoop{ nullptr };
+        CineLoopManager* mCineLoopManager{ nullptr };
         QQmlApplicationEngine* mQmlAppEngine{ nullptr };
     };
-
 }
 
 

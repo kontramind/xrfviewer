@@ -14,7 +14,8 @@ LIBS += -lwsock32 -ladvapi32 -lnetapi32 \
 SOURCES += main.cpp \
     xrfimageprovider.cpp \
     ../xrfdump/xrfcineloop.cpp \
-    ../xrfdump/xrfdcmutils.cpp
+    ../xrfdump/xrfdcmutils.cpp \
+    xrfcineloopmanager.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,4 +44,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     xrfimageprovider.h \
     ../xrfdump/xrfcineloop.h \
-    ../xrfdump/xrfdcmdeftag.h
+    ../xrfdump/xrfdcmdeftag.h \
+    xrfcineloopmanager.h

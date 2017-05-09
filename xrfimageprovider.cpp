@@ -15,92 +15,61 @@ QString get_file_path(const QUrl& loop_url) {
                              | QUrl::NormalizePathSegments)
             .path().remove(0,1);
 }
-QString get_frame_direction(const QUrl& loop_url) {
-    return loop_url.fragment();
+int get_frame_no(const QUrl& loop_url) {
+    if(loop_url.fragment().isNull() || loop_url.isEmpty())
+        return 0;
+    return loop_url.fragment().toInt();
 }
 
-    XRFImageProvider::XRFImageProvider(QQmlApplicationEngine* qmlAppEngine)
-        : QQuickImageProvider(QQuickImageProvider::Image),
-          mQmlAppEngine(qmlAppEngine), mCurrFrame {QImage(":/icons/no_signal.png")} { }
+    ImageProvider::ImageProvider(QQmlApplicationEngine* qmlAppEngine, CineLoopManager *manager)
+        : QQuickImageProvider(QQuickImageProvider::Image), mQmlAppEngine(qmlAppEngine), mCineLoopManager(manager) { }
 
-    QImage XRFImageProvider::requestImage(const QString &loopid, QSize *size, const QSize &requestedSize)
+    QImage ImageProvider::requestImage(const QString &loopid, QSize *size, const QSize &requestedSize)
     {
-        if(get_file_path({loopid}) != get_file_path(mUrl))
-            mCineLoop.reset(nullptr);
+//        Q_UNUSED(size);
+//        Q_UNUSED(requestedSize);
 
-        mUrl = {loopid};
-        auto file_path = get_file_path(mUrl);
-        auto frame_direction = get_frame_direction(mUrl);
-        if(!file_path.isNull() && !file_path.isEmpty()) {
-            if(!mCineLoop) {
-                mCurrFrameNo = -1;
-                mCineLoop = CineLoop::CreatePtr(file_path);
-                if(mCineLoop->IsValid())
-                    mCurrFrameNo = 0;
-            }
-            if(mCineLoop->IsValid()) {
-                if(frame_direction == "next")
-                    mCurrFrameNo = ++mCurrFrameNo >= getFrameCount() ? 0 : mCurrFrameNo;
-                else if(frame_direction == "prev")
-                    mCurrFrameNo = --mCurrFrameNo < 0 ? getFrameCount() -1 : mCurrFrameNo;
-                forwardCurrentFrameNo();
-                forwardFrameDcmKeyTagValues();
-                return QImage(*mCineLoop->GetFrames()[mCurrFrameNo]);
-            }
-        }
-        forwardCurrentFrameNo();
-        forwardFrameDcmKeyTagValues();
-        return QImage(":/icons/no_signal.png");
+        QImage xrfFrame(":/icons/no_signal.png");
+        if(!mCineLoopManager || !mCineLoopManager->cineLoop())
+            return xrfFrame;
+
+        xrfFrame = QImage(*mCineLoopManager->cineLoop()->GetFrames()[get_frame_no({loopid})]);
+//        if(get_file_path({loopid}) != get_file_path(mUrl))
+//            mCineLoop.reset(nullptr);
+
+//        mUrl = {loopid};
+//        auto file_path = get_file_path(mUrl);
+//        auto frame_no = get_frame_direction(mUrl);
+//        if(!file_path.isNull() && !file_path.isEmpty()) {
+//            if(!mCineLoop)
+//                mCineLoop = CineLoop::CreatePtr(file_path);
+//            if(mCineLoop->IsValid()) {
+//                mCurrFrameNo = frame_no.toUInt();
+//                xrfFrame = QImage(*mCineLoop->GetFrames()[mCurrFrameNo]);
+//            }
+//        }
+//        if (requestedSize.isValid())
+//            xrfFrame = xrfFrame.scaled(requestedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//        *size = xrfFrame.size();
+        return xrfFrame;
     }
 
-    const int XRFImageProvider::getFrameCount() const
-    {
-        if(mCineLoop && mCineLoop->IsValid())
-            return mCineLoop->GetFrames().size();
-        else
-            return 0;
-    }
+//    void ImageProvider::setCineLoop(CineLoop* loop) {
+//        mCineLoop = loop;
+//    }
 
-    const int XRFImageProvider::getCurrFrameNo() const
-    {
-        return mCurrFrameNo;
-    }
+//    const int ImageProvider::getFrameCount() const
+//    {
+//        if(mCineLoop && mCineLoop->IsValid())
+//            return mCineLoop->GetFrames().size();
+//        else
+//            return 0;
+//    }
 
-    const int XRFImageProvider::getFrameRecommendedDisplayRate() const
-    {
-        if(mCineLoop && mCineLoop->IsValid())
-            return mCineLoop->GetDcmValues().contains(RECOMMENDED_DISPLAY_FRAME_RATE) ?
-                        mCineLoop->GetDcmValues()[RECOMMENDED_DISPLAY_FRAME_RATE].toInt() : 10;
-        return {10};
-    }
-
-    const QString XRFImageProvider::getFrameDcmKeyTagValuesAsHtml() const
-    {
-        if(mCineLoop && mCineLoop->IsValid())
-            return mCineLoop->GetDcmValuesAsHtml();
-        return {""};
-    }
-
-    void XRFImageProvider::forwardCurrentFrameNo() const
-    {
-        if(mQmlAppEngine) {
-            if(!mQmlAppEngine->rootObjects().empty()) {
-                auto rootObject = mQmlAppEngine->rootObjects().first();
-                rootObject->setProperty("frameCurrentNo", mCurrFrameNo);
-                rootObject->setProperty("frameTotalCount", getFrameCount());
-                rootObject->setProperty("frameRecommendedDisplayRate", getFrameRecommendedDisplayRate());
-            }
-        }
-    }
-
-    void XRFImageProvider::forwardFrameDcmKeyTagValues() const
-    {
-        if(mQmlAppEngine) {
-            if(!mQmlAppEngine->rootObjects().empty()) {
-                auto rootObject = mQmlAppEngine->rootObjects().first();
-                rootObject->setProperty("frameDcmKeyTagValues", getFrameDcmKeyTagValuesAsHtml());
-            }
-        }
+    const QString ImageProvider::getFrameDcmKeyTagValuesAsHtml() const {
+        if(!mCineLoop || !mCineLoop->IsValid())
+            return {""};
+        return mCineLoop->GetDcmValuesAsHtml();
     }
 
 }

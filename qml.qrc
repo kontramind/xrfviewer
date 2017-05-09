@@ -17,5 +17,24 @@
         <file>icons/movie-prev.svg</file>
         <file>icons/no_signal.png</file>
         <file>icons/info.svg</file>
+        <file>main2.qml</file>
+        <file>images/image_0.png</file>
+        <file>images/image_1.png</file>
+        <file>images/image_10.png</file>
+        <file>images/image_11.png</file>
+        <file>images/image_12.png</file>
+        <file>images/image_13.png</file>
+        <file>images/image_14.png</file>
+        <file>images/image_15.png</file>
+        <file>images/image_2.png</file>
+        <file>images/image_3.png</file>
+        <file>images/image_4.png</file>
+        <file>images/image_5.png</file>
+        <file>images/image_6.png</file>
+        <file>images/image_7.png</file>
+        <file>images/image_8.png</file>
+        <file>images/image_9.png</file>
+        <file>xrfimageprovider.cpp</file>
+        <file>xrfimageprovider.h</file>
     </qresource>
 </RCC>

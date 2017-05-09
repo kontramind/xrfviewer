@@ -23,11 +23,10 @@ ApplicationWindow {
     Image {
         id: xrfimg
         parent: ApplicationWindow.contentItem
-        cache: false
+        asynchronous: true
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
-        source: "image://xrfimage/" + fileDialog.fileUrl + "#" + frameFetchDirection
-        focus: false
+        source: "image://async/" + fileDialog.fileUrl + "#" + frameCurrentNo
         Keys.enabled: false
         MouseArea {
             anchors.fill: parent
@@ -58,8 +57,8 @@ ApplicationWindow {
             textFormat: Text.RichText
         }
         onWidthChanged: {
-            root.frameCurrentNo = root.frameCurrentNo+1
-            root.frameCurrentNo = root.frameCurrentNo-1
+//            root.frameCurrentNo = root.frameCurrentNo+1
+//            root.frameCurrentNo = root.frameCurrentNo-1
         }
     }
 
@@ -73,15 +72,14 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
-            Keys.enabled: false
+            //Keys.enabled: false
             onClicked: {
+                frameTimer.running = false;
                 fileDialog.open()
                 frameTimer.running = false;
-                root.frameCurrentNo = -1
-                root.frameTotalCount = -1
-                root.frameFetchDirection = "curr"
-                root.framePlayPauseAction = "play"
-                cmdbuttons.focus = true;
+                root.frameCurrentNo = 0
+                root.frameTotalCount = 10
+//                cmdbuttons.focus = true;
             }
         }
         Button {
@@ -99,8 +97,7 @@ ApplicationWindow {
             Keys.enabled: false
             onClicked: {
                 cmdbuttons.focus = true
-                root.frameFetchDirection = "curr"
-                root.frameFetchDirection = "prev"
+                root.frameCurrentNo = root.frameCurrentNo-1 < 0 ? root.frameTotalCount : root.frameCurrentNo-1
             }
         }
         Button {
@@ -116,8 +113,7 @@ ApplicationWindow {
             Layout.alignment: Qt.AlignCenter
             onClicked: {
                 cmdbuttons.focus = true
-                root.frameFetchDirection = "curr"
-                root.frameFetchDirection = "next"
+                root.frameCurrentNo = root.frameCurrentNo+1 > root.frameTotalCount ? 0 : root.frameCurrentNo+1
             }
         }
         Button {
@@ -198,6 +194,7 @@ ApplicationWindow {
 
         Keys.onSpacePressed: {
             frameTimer.running = !frameTimer.running;
+            console.log("space pressed ...")
             event.accepted = true;
         }
         Keys.onLeftPressed: { frameTimer.running = false; prev.clicked(); event.accpted = true; }
@@ -216,13 +213,13 @@ ApplicationWindow {
         }
     }
 
-
     Timer {
         id: frameTimer
         running: false
         interval: 1000.0/frameRecommendedDisplayRate
         repeat: true
         onTriggered: {
+            console.log("interval: " + interval)
             next.clicked()
         }
     }
@@ -239,11 +236,10 @@ ApplicationWindow {
     property string picturesLocation : "";
     property var imageNameFilters : ["*.dcm"];
 
-    property int frameCurrentNo: -1
-    property int frameTotalCount: -1
-    property int frameRecommendedDisplayRate: 10
+    property int frameCurrentNo: 0
+    property int frameTotalCount: 20
+    property int frameRecommendedDisplayRate: 20
     property string frameDcmKeyTagValues : ""
-    property string frameFetchDirection: "curr"
     property string framePlayPauseAction: "play"
 
 //    toolBar: ToolBar {

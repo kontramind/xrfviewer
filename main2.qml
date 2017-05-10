@@ -73,6 +73,8 @@ ApplicationWindow {
             onAccepted: {
                 xrf_img.current_image = 0
                 xrfCineLoopManager.loopUrl = dlg_open.fileUrl
+//                xrfCineLoopManager.addLoopUrl(dlg_open.fileUrl)
+//                xrf_img.curr_url = dlg_open.fileUrl
             }
             onRejected: {
                 main_timer.running = true
@@ -84,6 +86,7 @@ ApplicationWindow {
             property int current_image: 0
             fillMode: Image.PreserveAspectFit
             source: "image://xrfimage/" + xrfCineLoopManager.loopUrl + "#" + current_image
+            //property string curr_url: ""
         }
 
         Keys.onSpacePressed: {

@@ -7,6 +7,7 @@
 #include <QObject>
 
 #include <memory>
+#include <unordered_map>
 
 namespace xrf {
 
@@ -24,10 +25,10 @@ namespace xrf {
         QUrl loopUrl() const;
         void setLoopUrl(const QUrl url);
 
-        CineLoop* cineLoop() const;
         int frameCount() const;
         int frameDisplayRate() const;
         QString loopDcmTagValuesHtml() const;
+        CineLoop* cineLoop(const QUrl &url_loop) const;
 
     signals:
         void loopUrlChanged();
@@ -36,6 +37,7 @@ namespace xrf {
         void loopDcmTagValuesHtmlChanged();
 
     public slots:
+//        void addLoopUrl(const QUrl& url_loop);
 
     private:
         void open_cine_loop();
@@ -47,8 +49,7 @@ namespace xrf {
         int  mFrameCount{0};
         int  mFrameDisplayRate{30};
         QString mLoopDcmTagValuesHtml{""};
-        std::unique_ptr<CineLoop> mCineLoop{ nullptr };
-        //QHash<QUrl, std::unique_ptr<CineLoop>> mCineLoops;
+        std::unordered_map<std::string, std::unique_ptr<CineLoop>> mCineLoopMap;
     };
 }
 

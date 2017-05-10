@@ -11,6 +11,8 @@
 
 namespace xrf {
 
+using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
+
     class CineLoopManager : public QObject
     {
         Q_OBJECT
@@ -28,7 +30,7 @@ namespace xrf {
         int frameCount() const;
         int frameDisplayRate() const;
         QString loopDcmTagValuesHtml() const;
-        CineLoop* cineLoop(const QUrl &url_loop) const;
+        const CineLoop *cineLoop(const QUrl &url_loop) const;
 
     signals:
         void loopUrlChanged();
@@ -49,7 +51,8 @@ namespace xrf {
         int  mFrameCount{0};
         int  mFrameDisplayRate{30};
         QString mLoopDcmTagValuesHtml{""};
-        std::unordered_map<std::string, std::unique_ptr<CineLoop>> mCineLoopMap;
+
+        CineLoopMap mCineLoopMap;
     };
 }
 

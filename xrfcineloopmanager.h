@@ -16,7 +16,7 @@ using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
     class CineLoopManager : public QObject
     {
         Q_OBJECT
-        Q_PROPERTY(QUrl loopUrl READ loopUrl WRITE setLoopUrl NOTIFY loopUrlChanged)
+        //Q_PROPERTY(QUrl loopUrl READ loopUrl WRITE setLoopUrl NOTIFY loopUrlChanged)
         Q_PROPERTY(int frameCount READ frameCount NOTIFY frameCountChanged)
         Q_PROPERTY(int frameDisplayRate READ frameDisplayRate NOTIFY frameDisplayRateChanged)
         Q_PROPERTY(QString loopDcmTagValuesHtml READ loopDcmTagValuesHtml NOTIFY loopDcmTagValuesHtmlChanged)
@@ -25,7 +25,7 @@ using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
         CineLoopManager(QObject *parent = 0);
 
         QUrl loopUrl() const;
-        void setLoopUrl(const QUrl url);
+        void setLoopUrl(const QUrl& url_Loop);
 
         int frameCount() const;
         int frameDisplayRate() const;
@@ -39,7 +39,7 @@ using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
         void loopDcmTagValuesHtmlChanged();
 
     public slots:
-//        void addLoopUrl(const QUrl& url_loop);
+        void addLoopUrl(const QUrl& url_loop);
 
     private:
         void open_cine_loop();

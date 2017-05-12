@@ -27,8 +27,16 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         return mLoopUrl;
     }
 
-    void CineLoopManager::setLoopUrl(const QUrl url) {
-        mLoopUrl = url;
+    void CineLoopManager::setLoopUrl(const QUrl& url_loop) {
+        mLoopUrl = url_loop;
+        open_cine_loop();
+        read_frame_count();
+        read_frame_display_rate();
+        read_loop_dcmtagvalues_html();
+    }
+
+    void CineLoopManager::addLoopUrl(const QUrl& url_loop) {
+        mLoopUrl = url_loop;
         open_cine_loop();
         read_frame_count();
         read_frame_display_rate();

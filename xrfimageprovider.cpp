@@ -34,7 +34,6 @@ int get_frame_no(const QUrl& loop_url) {
         if(!xrfLoop)
             return xrfFrame;
         xrfFrame = QImage(*xrfLoop->GetFrame(get_frame_no({url_loop})));
-        //xrfFrame = QImage(xrfLoop->GetFrame(get_frame_no({url_loop}));
         return xrfFrame;
     }
 

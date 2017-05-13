@@ -43,12 +43,36 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         read_loop_dcmtagvalues_html();
     }
 
-    const CineLoop* CineLoopManager::cineLoop(const QUrl& url_loop) const {
+    int CineLoopManager::loopFrameCount(const QUrl& url_loop) {
         auto url_no_fragment = get_url_no_fragment(url_loop);
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit == mCineLoopMap.cend())
+            return 0;
+        return cit->second.FrameCount();
+    }
+
+    int CineLoopManager::loopCurrentFrameNo(const QUrl& url_loop) {
+        auto url_no_fragment = get_url_no_fragment(url_loop);
+        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
+        if(cit == mCineLoopMap.cend())
+            return 0;
+        return cit->second.CurrentFrameNo();
+    }
+
+//    const CineLoop* CineLoopManager::cineLoop(const QUrl& url_loop) const {
+//        auto url_no_fragment = get_url_no_fragment(url_loop);
+//        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
+//        if(cit == mCineLoopMap.cend())
+//            return nullptr;
+//        return cit->second.CineLoop();// get();
+//    }
+
+    CineLoopRef *CineLoopManager::CineLoop(const QUrl& url_loop) {
+        auto url_no_fragment = get_url_no_fragment(url_loop);
+        CineLoopMap::iterator cit = mCineLoopMap.find(url_no_fragment);
+        if(cit == mCineLoopMap.cend())
             return nullptr;
-        return cit->second.get();
+        return &cit->second; //.CineLoop();// get();
     }
 
     int CineLoopManager::frameCount() const {
@@ -68,8 +92,7 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit == mCineLoopMap.cend()) {
             // create and insert
-            auto xrfLoop = CineLoop::CreatePtr(get_filepath(mLoopUrl));
-            auto result =  mCineLoopMap.insert( std::make_pair(url_no_fragment, std::move(xrfLoop)) );
+            auto result =  mCineLoopMap.insert( std::make_pair(url_no_fragment, CineLoopRef(std::move(CineLoop::CreatePtr(get_filepath(mLoopUrl))))) );
             if(result.second)
                 qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_OK";
             else
@@ -83,7 +106,7 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         auto url_no_fragment = get_url_no_fragment(mLoopUrl);
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit != mCineLoopMap.cend())
-            mFrameCount = cit->second->GetFrames().size();
+            mFrameCount = cit->second.FrameCount();
         emit frameCountChanged();
     }
 
@@ -92,7 +115,7 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         auto url_no_fragment = get_url_no_fragment(mLoopUrl);
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit != mCineLoopMap.cend())
-            mFrameDisplayRate = cit->second->GetDcmValues()[RECOMMENDED_DISPLAY_FRAME_RATE].toInt();
+            mFrameDisplayRate = cit->second.GetDcmValues()[RECOMMENDED_DISPLAY_FRAME_RATE].toInt();
         emit frameDisplayRateChanged();
     }
 
@@ -101,8 +124,35 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         auto url_no_fragment = get_url_no_fragment(mLoopUrl);
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit != mCineLoopMap.cend())
-            mLoopDcmTagValuesHtml = cit->second->GetDcmValuesAsHtml();
+            mLoopDcmTagValuesHtml = cit->second.GetDcmValuesAsHtml();
         emit loopDcmTagValuesHtmlChanged();
+    }
+
+    CineLoopRef::CineLoopRef(std::unique_ptr<xrf::CineLoop>&& loop) { mLoop.swap(loop); }
+
+    const QSharedPointer<QImage> &CineLoopRef::GetFrame(int frmNo) {
+        mCurrentFrmNo = frmNo;
+        return mLoop->GetFrames().at(mCurrentFrmNo);
+    }
+
+    const int CineLoopRef::CurrentFrameNo() const {
+        return mCurrentFrmNo;
+    }
+
+    const int CineLoopRef::FrameCount() const {
+        return mLoop->GetFrames().size();
+    }
+
+    const CineLoop *CineLoopRef::CineLoop() const {
+        return mLoop.get();
+    }
+
+    const DcmTagValues& CineLoopRef::GetDcmValues() const {
+        return mLoop->GetDcmValues();
+    }
+
+    const QString CineLoopRef::GetDcmValuesAsHtml() const {
+        return mLoop->GetDcmValuesAsHtml();
     }
 
 }

@@ -30,10 +30,11 @@ int get_frame_no(const QUrl& loop_url) {
         QImage xrfFrame(":/icons/no_signal.png");
         if(!mCineLoopManager)
             return xrfFrame;
-        auto xrfLoop = mCineLoopManager->cineLoop(url_loop);
+        auto xrfLoop = mCineLoopManager->CineLoop(url_loop);
         if(!xrfLoop)
             return xrfFrame;
-        xrfFrame = QImage(*mCineLoopManager->cineLoop(url_loop)->GetFrames()[get_frame_no({url_loop})]);
+        xrfFrame = QImage(*xrfLoop->GetFrame(get_frame_no({url_loop})));
+        //xrfFrame = QImage(xrfLoop->GetFrame(get_frame_no({url_loop}));
         return xrfFrame;
     }
 

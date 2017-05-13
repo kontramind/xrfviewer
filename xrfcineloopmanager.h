@@ -11,7 +11,22 @@
 
 namespace xrf {
 
-using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
+    class CineLoopRef {
+    public:
+        CineLoopRef(std::unique_ptr<xrf::CineLoop>&& loop);
+        const QSharedPointer<QImage>& GetFrame(int frmNo);
+
+        const int FrameCount() const;
+        const int CurrentFrameNo() const;
+        const xrf::CineLoop* CineLoop() const;
+        const DcmTagValues& GetDcmValues() const;
+        const QString GetDcmValuesAsHtml() const;
+    private:
+        int mCurrentFrmNo{0};
+        std::unique_ptr<xrf::CineLoop> mLoop;
+    };
+
+    using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
 
     class CineLoopManager : public QObject
     {
@@ -30,7 +45,7 @@ using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
         int frameCount() const;
         int frameDisplayRate() const;
         QString loopDcmTagValuesHtml() const;
-        const CineLoop *cineLoop(const QUrl &url_loop) const;
+        CineLoopRef *CineLoop(const QUrl &url_loop);
 
     signals:
         void loopUrlChanged();
@@ -40,6 +55,8 @@ using CineLoopMap = std::unordered_map<std::string, std::unique_ptr<CineLoop>>;
 
     public slots:
         void addLoopUrl(const QUrl& url_loop);
+        int loopFrameCount(const QUrl& url_loop);
+        int loopCurrentFrameNo(const QUrl& url_loop);
 
     private:
         void open_cine_loop();

@@ -23,11 +23,12 @@ ApplicationWindow {
 
             Text{
                 id: txt_header
+                //property string curr_xrf_url: xrf_img.source.substring("image://xrfimage/".length)
                 text:
                     "<table border='1' align='center'>" +
                        "<tr bgcolor='#9acd32'>" +
-                       "<td width='50' min-width='50' align='center'>" + xrf_img.current_image + "</td>" +
-                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.frameCount + "</td> </tr>"
+                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(xrf_img.curr_url + "#" + xrf_img.current_image) + "</td>" +
+                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(xrf_img.curr_url + "#" + xrf_img.current_image) + "</td> </tr>"
                 textFormat: Text.RichText
                 anchors.centerIn: parent
                 color: "red"
@@ -101,11 +102,11 @@ ApplicationWindow {
                 break;
             case Qt.Key_Right:
                 main_timer.running = false
-                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.frameCount ? 0 : xrf_img.current_image + 1
+                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.loopFrameCount(xrf_img.curr_url) ? 0 : xrf_img.current_image + 1
                 break;
             case Qt.Key_Left:
                 main_timer.running = false
-                xrf_img.current_image = xrf_img.current_image - 1 < 0 ? xrfCineLoopManager.frameCount - 1 : xrf_img.current_image - 1
+                xrf_img.current_image = xrf_img.current_image - 1 < 0 ? xrfCineLoopManager.loopFrameCount(xrf_img.curr_url) - 1 : xrf_img.current_image - 1
                 break;
             case Qt.Key_I:
                 rect_hdr.visible = !rect_hdr.visible
@@ -123,7 +124,7 @@ ApplicationWindow {
             repeat: true
             running: false
             onTriggered: {
-                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.frameCount ? 0 : xrf_img.current_image + 1
+                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.loopFrameCount(xrf_img.curr_url) ? 0 : xrf_img.current_image + 1
             }
         }
     }

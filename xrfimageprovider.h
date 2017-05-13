@@ -32,12 +32,7 @@ namespace xrf {
     public slots:
 //        void setCineLoop(CineLoop* loop);
 
-
     private:
-//        QUrl mUrl {""};
-//        int mCurrFrameNo{-1};
-//        QImage mCurrFrame{QImage()};
-        CineLoop* mCineLoop{ nullptr };
         CineLoopManager* mCineLoopManager{ nullptr };
         QQmlApplicationEngine* mQmlAppEngine{ nullptr };
     };

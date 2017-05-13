@@ -105,8 +105,7 @@ ApplicationWindow {
                 break;
             case Qt.Key_Left:
                 main_timer.running = false
-                if(xrfCineLoopManager.frameCount > 0)
-                    xrf_img.current_image = xrf_img.current_image - 1 < 0 ? xrfCineLoopManager.frameCount - 1 : xrf_img.current_image - 1
+                xrf_img.current_image = xrf_img.current_image - 1 < 0 ? xrfCineLoopManager.frameCount - 1 : xrf_img.current_image - 1
                 break;
             case Qt.Key_I:
                 rect_hdr.visible = !rect_hdr.visible

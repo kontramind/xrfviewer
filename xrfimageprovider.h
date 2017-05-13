@@ -27,10 +27,6 @@ namespace xrf {
     public:
         ImageProvider(QQmlApplicationEngine* qmlAppEngine, CineLoopManager* manager);
         QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
-        const QString getFrameDcmKeyTagValuesAsHtml() const;
-
-    public slots:
-//        void setCineLoop(CineLoop* loop);
 
     private:
         CineLoopManager* mCineLoopManager{ nullptr };

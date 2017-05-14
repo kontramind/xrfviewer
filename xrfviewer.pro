@@ -11,11 +11,20 @@ LIBS += -lwsock32 -ladvapi32 -lnetapi32 \
         -LC:/dev/dcmtk/ext/support/zlib/lib -lzlib_d \
         -LC:/dev/dcmtk/install/lib -lofstd -loflog -ldcmdata -ldcmimgle \
 
+HEADERS += \
+    xrfcineloopref.h \
+    xrfimageprovider.h \
+    xrfcineloopmanager.h \
+    ../xrfdump/xrfcineloop.h \
+    ../xrfdump/xrfdcmdeftag.h \
+
 SOURCES += main.cpp \
+    xrfcineloopref.cpp \
     xrfimageprovider.cpp \
+    xrfcineloopmanager.cpp \
     ../xrfdump/xrfcineloop.cpp \
     ../xrfdump/xrfdcmutils.cpp \
-    xrfcineloopmanager.cpp
+
 
 RESOURCES += qml.qrc
 
@@ -41,8 +50,3 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    xrfimageprovider.h \
-    ../xrfdump/xrfcineloop.h \
-    ../xrfdump/xrfdcmdeftag.h \
-    xrfcineloopmanager.h

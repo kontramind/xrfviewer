@@ -1,30 +1,16 @@
 #ifndef XRFCINELOOPMANAGER_H
 #define XRFCINELOOPMANAGER_H
 
-#include "xrfcineloop.h"
+#include "xrfcineloopref.h"
 
 #include <QUrl>
+#include <QImage>
 #include <QObject>
 
 #include <memory>
 #include <unordered_map>
 
 namespace xrf {
-
-    class CineLoopRef {
-    public:
-        CineLoopRef(std::unique_ptr<xrf::CineLoop>&& loop);
-        const QSharedPointer<QImage>& GetFrame(int frmNo);
-
-        const int FrameCount() const;
-        const int CurrentFrameNo() const;
-        const xrf::CineLoop* CineLoop() const;
-        const DcmTagValues& GetDcmValues() const;
-        const QString GetDcmValuesAsHtml() const;
-    private:
-        int mCurrentFrmNo{0};
-        std::unique_ptr<xrf::CineLoop> mLoop;
-    };
 
     using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
 

@@ -92,7 +92,7 @@ CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) { }
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit == mCineLoopMap.cend()) {
             // create and insert
-            auto result =  mCineLoopMap.insert( std::make_pair(url_no_fragment, CineLoopRef(std::move(CineLoop::CreatePtr(get_filepath(mLoopUrl))))) );
+            auto result =  mCineLoopMap.insert(std::make_pair(url_no_fragment, CineLoopRef(mLoopUrl, std::move(CineLoop::CreatePtr(get_filepath(mLoopUrl))))) );
             if(result.second)
                 qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_OK";
             else

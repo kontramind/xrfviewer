@@ -2,11 +2,18 @@
 
 namespace xrf {
 
-    CineLoopRef::CineLoopRef(std::unique_ptr<xrf::CineLoop>&& loop) { mLoop.swap(loop); }
+    CineLoopRef::CineLoopRef(const QUrl loopurl, std::unique_ptr<xrf::CineLoop>&& loop)
+        : mUrl(loopurl) {
+        mLoop.swap(loop);
+    }
 
     const QSharedPointer<QImage> &CineLoopRef::GetFrame(int frmNo) {
         mCurrentFrmNo = frmNo;
         return mLoop->GetFrames().at(mCurrentFrmNo);
+    }
+
+    const QUrl CineLoopRef::Url() const {
+        return mUrl;
     }
 
     const int CineLoopRef::CurrentFrameNo() const {

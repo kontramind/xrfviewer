@@ -10,6 +10,10 @@ ApplicationWindow {
     height: 480
     title: qsTr("XRF Image Sequence Test")
 
+    function remove_image_prefix(value) {
+        return value.toString().substring("image://xrfimage/".length)
+    }
+
         Rectangle {
             id: rect_hdr
             visible: true
@@ -23,12 +27,12 @@ ApplicationWindow {
 
             Text{
                 id: txt_header
-                //property string curr_xrf_url: xrf_img.source.substring("image://xrfimage/".length)
+                property string curr_xrf_loop_url: remove_image_prefix(xrf_img.source)
                 text:
                     "<table border='1' align='center'>" +
                        "<tr bgcolor='#9acd32'>" +
-                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(xrf_img.curr_url + "#" + xrf_img.current_image) + "</td>" +
-                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(xrf_img.curr_url + "#" + xrf_img.current_image) + "</td> </tr>"
+                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(curr_xrf_loop_url) + "</td>" +
+                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(curr_xrf_loop_url) + "</td> </tr>"
                 textFormat: Text.RichText
                 anchors.centerIn: parent
                 color: "red"
@@ -92,7 +96,6 @@ ApplicationWindow {
         Keys.onSpacePressed: {
             main_timer.running = !main_timer.running
             event.accepted = true
-            console.log("space pressed ...")
         }
         Keys.onPressed: {
             switch(event.key) {

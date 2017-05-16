@@ -33,7 +33,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     void CineLoopManager::setLoopUrl(const QUrl& url_loop) {
         mLoopUrl = url_loop;
         open_cine_loop();
-        read_frame_count();
         read_loop_dcmtagvalues_html();
     }
 
@@ -44,7 +43,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     void CineLoopManager::addLoopUrl(const QUrl& url_loop) {
         mLoopUrl = url_loop;
         open_cine_loop();
-        read_frame_count();
         read_loop_dcmtagvalues_html();
         mModel->addLoopUrl(mLoopUrl);
     }
@@ -80,10 +78,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         return &cit->second;
     }
 
-    int CineLoopManager::frameCount() const {
-        return mFrameCount;
-    }
-
     int CineLoopManager::loopFrameDisplayRate(const QUrl& url_loop) {
         auto url_no_fragment = get_url_no_fragment(url_loop);
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
@@ -108,15 +102,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
                 qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_FAIL";
         }
         emit loopUrlChanged();
-    }
-
-    void CineLoopManager::read_frame_count() {
-        mFrameCount = 0;
-        auto url_no_fragment = get_url_no_fragment(mLoopUrl);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit != mCineLoopMap.cend())
-            mFrameCount = cit->second.FrameCount();
-        emit frameCountChanged();
     }
 
     void CineLoopManager::read_loop_dcmtagvalues_html() {

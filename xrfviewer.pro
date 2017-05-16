@@ -15,6 +15,7 @@ HEADERS += \
     xrfcineloopref.h \
     xrfimageprovider.h \
     xrfcineloopmanager.h \
+    xrfcinelooplistmodel.h \
     ../xrfdump/xrfcineloop.h \
     ../xrfdump/xrfdcmdeftag.h \
 
@@ -22,6 +23,7 @@ SOURCES += main.cpp \
     xrfcineloopref.cpp \
     xrfimageprovider.cpp \
     xrfcineloopmanager.cpp \
+    xrfcinelooplistmodel.cpp \
     ../xrfdump/xrfcineloop.cpp \
     ../xrfdump/xrfdcmutils.cpp \
 

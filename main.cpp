@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<xrf::CineLoopManager>("XrfCineLoopManagerQml", 1, 0, "XrfCineLoopManager");
+//    qmlRegisterType<xrf::CineLoopListModel>("XrfCineLoopModelQml", 1, 0, "XrfCineLoopModel");
+//    qmlRegisterType<xrf::CineLoopManager>("XrfCineLoopManagerQml", 1, 0, "XrfCineLoopManager");
 
     QQmlApplicationEngine engine;
     QQmlContext* context = engine.rootContext();
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
     engine.addImageProvider("xrfimage", xrfImageProvider);
     context->setContextProperty("xrfImageProvider", xrfImageProvider);
     context->setContextProperty("xrfCineLoopManager", xrfCineLoopManager);
+    context->setContextProperty("xrfCineLoopListModel", xrfCineLoopManager->model());
 
 //    QUrl picturesLocationUrl = QUrl::fromLocalFile(QDir::currentPath());
 //    context->setContextProperty(QStringLiteral("contextPicturesLocation"), picturesLocationUrl);

@@ -67,6 +67,33 @@ ApplicationWindow {
     }
 
     Rectangle {
+        id: rect_model
+        visible: false
+        parent: ApplicationWindow.overlay
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: ApplicationWindow.overlay.width
+        height: ApplicationWindow.contentItem.height
+        color: "blue"
+
+        Component {
+            id: xrfSimpleDelegate
+            Row {
+                spacing: 10
+                Text { color: "white"; text: url; font.pointSize: 12 }
+                Text { color: "white"; text: framecount; font.pointSize: 12 }
+            }
+        }
+
+        ListView {
+            id: xrfModelListView
+            anchors.fill: parent
+            model: xrfCineLoopListModel
+            delegate: xrfSimpleDelegate
+        }
+    }
+
+    Rectangle {
         id: main_rect
         focus: true
         anchors.fill: parent
@@ -114,6 +141,13 @@ ApplicationWindow {
             case Qt.Key_I:
                 rect_hdr.visible = !rect_hdr.visible
                 rect_info.visible = !rect_info.visible
+                break;
+            case Qt.Key_M:
+                rect_model.visible = !rect_model.visible
+                rect_hdr.visible = false
+                rect_info.visible = false
+                if(!rect_model.visible)
+                    rect_hdr.visible = true
                 break;
             default:
                 break;

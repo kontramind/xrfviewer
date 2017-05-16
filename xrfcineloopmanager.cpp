@@ -33,7 +33,7 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     void CineLoopManager::setLoopUrl(const QUrl& url_loop) {
         mLoopUrl = url_loop;
         open_cine_loop();
-        read_loop_dcmtagvalues_html();
+//        read_loop_dcmtagvalues_html();
     }
 
     const int CineLoopManager::loopCount() const {
@@ -43,7 +43,7 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     void CineLoopManager::addLoopUrl(const QUrl& url_loop) {
         mLoopUrl = url_loop;
         open_cine_loop();
-        read_loop_dcmtagvalues_html();
+//        read_loop_dcmtagvalues_html();
         mModel->addLoopUrl(mLoopUrl);
     }
 
@@ -86,8 +86,12 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         return cit->second.FrameDisplayRate();
     }
 
-    QString CineLoopManager::loopDcmTagValuesHtml() const {
-        return mLoopDcmTagValuesHtml;
+    QString CineLoopManager::loopDcmTagValuesHtml(const QUrl &url_loop) {
+        auto url_no_fragment = get_url_no_fragment(url_loop);
+        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
+        if(cit != mCineLoopMap.cend())
+            return cit->second.DcmValuesAsHtml();
+        return {};
     }
 
     void CineLoopManager::open_cine_loop() {
@@ -104,13 +108,13 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         emit loopUrlChanged();
     }
 
-    void CineLoopManager::read_loop_dcmtagvalues_html() {
-        mLoopDcmTagValuesHtml = "";
-        auto url_no_fragment = get_url_no_fragment(mLoopUrl);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit != mCineLoopMap.cend())
-            mLoopDcmTagValuesHtml = cit->second.GetDcmValuesAsHtml();
-        emit loopDcmTagValuesHtmlChanged();
-    }
+//    void CineLoopManager::read_loop_dcmtagvalues_html() {
+//        mLoopDcmTagValuesHtml = "";
+//        auto url_no_fragment = get_url_no_fragment(mLoopUrl);
+//        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
+//        if(cit != mCineLoopMap.cend())
+//            mLoopDcmTagValuesHtml = cit->second.GetDcmValuesAsHtml();
+//        emit loopDcmTagValuesHtmlChanged();
+//    }
 
 }

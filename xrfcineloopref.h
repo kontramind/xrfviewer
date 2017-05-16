@@ -16,7 +16,7 @@ public:
     const int FrameDisplayRate() const;
     const xrf::CineLoop* CineLoop() const;
     const DcmTagValues& GetDcmValues() const;
-    const QString GetDcmValuesAsHtml() const;
+    const QString DcmValuesAsHtml() const;
     const QSharedPointer<QImage>& GetFrame(int frmNo);
 private:
     QUrl mUrl{""};

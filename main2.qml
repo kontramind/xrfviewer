@@ -56,7 +56,7 @@ ApplicationWindow {
 
         Text {
             id: txt_info
-            text: xrfCineLoopManager.loopDcmTagValuesHtml
+            text: xrfCineLoopManager.loopDcmTagValuesHtml(xrf_img.curr_url)
             textFormat: Text.RichText
             anchors.centerIn: parent
             color: "red"

@@ -36,7 +36,7 @@ namespace xrf {
         return mLoop->GetDcmValues();
     }
 
-    const QString CineLoopRef::GetDcmValuesAsHtml() const {
+    const QString CineLoopRef::DcmValuesAsHtml() const {
         return mLoop->GetDcmValuesAsHtml();
     }
 

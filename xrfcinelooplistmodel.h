@@ -15,16 +15,16 @@ class CineLoopManager;
     public:
         enum LoopRoles {
             UrlRole = Qt::UserRole + 1,
+            CurrentFrameNoRole,
             FrameCountRole,
         };
 
-        CineLoopListModel(QObject *parent = 0);
+        CineLoopListModel(CineLoopManager* manager, QObject *parent = 0);
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
     public slots:
         void addLoopUrl(const QUrl& loopurl);
-        void setManager(CineLoopManager* manager);
 
     protected:
         QHash<int, QByteArray> roleNames() const;

@@ -5,12 +5,8 @@
 
 namespace xrf {
 
-    CineLoopListModel::CineLoopListModel(QObject *parent)
-        : QAbstractListModel(parent) {}
-
-    void CineLoopListModel::setManager(CineLoopManager *manager) {
-        mManager = manager;
-    }
+    CineLoopListModel::CineLoopListModel(CineLoopManager *manager, QObject *parent)
+        : QAbstractListModel(parent), mManager(manager) {}
 
     void CineLoopListModel::addLoopUrl(const QUrl& loopurl) {
         if(mUrltoIndex.contains(loopurl))
@@ -30,6 +26,7 @@ namespace xrf {
     QHash<int, QByteArray> CineLoopListModel::roleNames() const {
         QHash<int, QByteArray> roles;
         roles[UrlRole] = "url";
+        roles[CurrentFrameNoRole] = "currentframeno";
         roles[FrameCountRole] = "framecount";
         return roles;
     }
@@ -42,11 +39,13 @@ namespace xrf {
         if(mLoopUrlList.count() == 0)
             return QVariant();
 
+        auto url = mLoopUrlList[index.row()];
         if (role == UrlRole) {
-            return mLoopUrlList[index.row()];
+            return url;
         } else if (role == FrameCountRole) {
-            auto url = mLoopUrlList[index.row()];
             return mManager->CineLoop(url)->FrameCount();
+        } else if(role == CurrentFrameNoRole) {
+            return mManager->loopCurrentFrameNo(url);
         }
         return QVariant();
     }

@@ -37,8 +37,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         int frameDisplayRate() const;
         QString loopDcmTagValuesHtml() const;
         CineLoopRef *CineLoop(const QUrl &url_loop);
-        const CineLoopListModel* Model() const { return &mModel;}
-//        void SetModel(CineLoopListModel* model) {mModel = model;}
+
     signals:
         void loopUrlChanged();
         void frameCountChanged();
@@ -49,7 +48,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         void addLoopUrl(const QUrl& url_loop);
         int loopFrameCount(const QUrl& url_loop);
         int loopCurrentFrameNo(const QUrl& url_loop);
-        CineLoopListModel* model() { return &mModel;}
+        CineLoopListModel* model();
 
 
     private:
@@ -64,7 +63,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         QString mLoopDcmTagValuesHtml{""};
 
         CineLoopMap mCineLoopMap;
-        CineLoopListModel mModel;
+        std::unique_ptr<CineLoopListModel> mModel{nullptr};
     };
 }
 

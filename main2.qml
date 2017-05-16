@@ -81,7 +81,9 @@ ApplicationWindow {
             Row {
                 spacing: 10
                 Text { color: "white"; text: url; font.pointSize: 12 }
+                Text { color: "white"; text: currentframeno; font.pointSize: 12 }
                 Text { color: "white"; text: framecount; font.pointSize: 12 }
+
             }
         }
 

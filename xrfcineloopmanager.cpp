@@ -23,7 +23,7 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
 
     CineLoopManager::CineLoopManager(QObject *parent)
         : QObject(parent) {
-        mModel.setManager(this);
+        mModel = std::make_unique<CineLoopListModel>(this);
     }
 
     QUrl CineLoopManager::loopUrl() const {
@@ -48,7 +48,7 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         read_frame_count();
         read_frame_display_rate();
         read_loop_dcmtagvalues_html();
-        mModel.addLoopUrl(mLoopUrl);
+        mModel->addLoopUrl(mLoopUrl);
     }
 
     int CineLoopManager::loopFrameCount(const QUrl& url_loop) {
@@ -65,6 +65,13 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         if(cit == mCineLoopMap.cend())
             return 0;
         return cit->second.CurrentFrameNo();
+    }
+
+    CineLoopListModel *CineLoopManager::model() {
+        if(mModel)
+            return mModel.get();
+        else
+            return nullptr;
     }
 
     CineLoopRef *CineLoopManager::CineLoop(const QUrl& url_loop) {

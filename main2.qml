@@ -159,7 +159,7 @@ ApplicationWindow {
 
         Timer {
             id: main_timer
-            interval: 1000.0/xrfCineLoopManager.frameDisplayRate
+            interval: 1000.0/xrfCineLoopManager.loopFrameDisplayRate(xrf_img.curr_url)
             repeat: true
             running: false
             onTriggered: {

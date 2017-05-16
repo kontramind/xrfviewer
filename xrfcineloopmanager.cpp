@@ -34,7 +34,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         mLoopUrl = url_loop;
         open_cine_loop();
         read_frame_count();
-        read_frame_display_rate();
         read_loop_dcmtagvalues_html();
     }
 
@@ -46,7 +45,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         mLoopUrl = url_loop;
         open_cine_loop();
         read_frame_count();
-        read_frame_display_rate();
         read_loop_dcmtagvalues_html();
         mModel->addLoopUrl(mLoopUrl);
     }
@@ -79,15 +77,19 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         CineLoopMap::iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit == mCineLoopMap.cend())
             return nullptr;
-        return &cit->second; //.CineLoop();// get();
+        return &cit->second;
     }
 
     int CineLoopManager::frameCount() const {
         return mFrameCount;
     }
 
-    int CineLoopManager::frameDisplayRate() const {
-        return mFrameDisplayRate;
+    int CineLoopManager::loopFrameDisplayRate(const QUrl& url_loop) {
+        auto url_no_fragment = get_url_no_fragment(url_loop);
+        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
+        if(cit == mCineLoopMap.cend())
+            return 1;
+        return cit->second.FrameDisplayRate();
     }
 
     QString CineLoopManager::loopDcmTagValuesHtml() const {
@@ -115,15 +117,6 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         if(cit != mCineLoopMap.cend())
             mFrameCount = cit->second.FrameCount();
         emit frameCountChanged();
-    }
-
-    void CineLoopManager::read_frame_display_rate() {
-        mFrameDisplayRate = 10;
-        auto url_no_fragment = get_url_no_fragment(mLoopUrl);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit != mCineLoopMap.cend())
-            mFrameDisplayRate = cit->second.GetDcmValues()[RECOMMENDED_DISPLAY_FRAME_RATE].toInt();
-        emit frameDisplayRateChanged();
     }
 
     void CineLoopManager::read_loop_dcmtagvalues_html() {

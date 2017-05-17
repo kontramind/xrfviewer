@@ -6,7 +6,7 @@
 
 namespace xrf {
 
-static QString get_filepath(const QUrl& loop_url) {
+static QString  get_filepath(const QUrl& loop_url) {
     return loop_url.adjusted(QUrl::PreferLocalFile
                              | QUrl::RemoveAuthority
                              | QUrl::StripTrailingSlash
@@ -67,9 +67,9 @@ static QString get_filepath(const QUrl& loop_url) {
         if (role == UrlRole) {
             return url;
         } else if (role == FrameCountRole) {
-            return mManager->CineLoop(url)->FrameCount();
+            return loopFrameCount(url.toString().toStdString());
         } else if(role == CurrentFrameNoRole) {
-            return mManager->loopCurrentFrameNo(url);
+            return loopCurrentFrameNo(url.toString().toStdString());
         }
         return QVariant();
     }
@@ -81,29 +81,33 @@ static QString get_filepath(const QUrl& loop_url) {
         return &cit->second;
     }
 
-    int CineLoopListModel::loopFrameCount(const std::string& url_loop) {
+    int CineLoopListModel::loopFrameCount(const std::string& url_loop) const {
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);
         if(cit == mCineLoopMap.cend())
             return 0;
         return cit->second.FrameCount();
     }
-    int CineLoopListModel::loopCurrentFrameNo(const std::string& url_loop) {
+    int CineLoopListModel::loopCurrentFrameNo(const std::string& url_loop) const {
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);
         if(cit == mCineLoopMap.cend())
             return 0;
         return cit->second.CurrentFrameNo();
     }
-    int CineLoopListModel::loopFrameDisplayRate(const std::string& url_loop) {
+    int CineLoopListModel::loopFrameDisplayRate(const std::string& url_loop) const {
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);
         if(cit == mCineLoopMap.cend())
             return 1;
         return cit->second.FrameDisplayRate();
     }
-    QString CineLoopListModel::loopDcmTagValuesHtml(const std::string &url_loop) {
+    QString CineLoopListModel::loopDcmTagValuesHtml(const std::string &url_loop) const {
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);
         if(cit != mCineLoopMap.cend())
             return cit->second.DcmValuesAsHtml();
         return {};
+    }
+    bool CineLoopListModel::contains(const std::string& url_loop) const {
+        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);
+        return cit != mCineLoopMap.cend();
     }
 }
 

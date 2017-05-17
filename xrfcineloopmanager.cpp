@@ -26,21 +26,23 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         mModel->addLoopUrl(url_loop.adjusted(QUrl::RemoveFragment));
     }
 
-    int CineLoopManager::loopFrameCount(const QUrl& url_loop) {
+    int CineLoopManager::loopFrameCount(const QUrl& url_loop) const {
         return mModel->loopFrameCount(get_url_no_fragment(url_loop));
     }
-    int CineLoopManager::loopCurrentFrameNo(const QUrl& url_loop) {
+    int CineLoopManager::loopCurrentFrameNo(const QUrl& url_loop) const {
         return mModel->loopCurrentFrameNo(get_url_no_fragment(url_loop));
     }
-    int CineLoopManager::loopFrameDisplayRate(const QUrl& url_loop) {
+    int CineLoopManager::loopFrameDisplayRate(const QUrl& url_loop) const {
         return mModel->loopFrameDisplayRate(get_url_no_fragment(url_loop));
     }
-    QString CineLoopManager::loopDcmTagValuesHtml(const QUrl &url_loop) {
+    QString CineLoopManager::loopDcmTagValuesHtml(const QUrl &url_loop) const {
         return mModel->loopDcmTagValuesHtml(get_url_no_fragment(url_loop));
     }
-
     CineLoopRef *CineLoopManager::CineLoop(const QUrl& url_loop) {
         return mModel->CineLoop(get_url_no_fragment(url_loop));
+    }
+    bool CineLoopManager::contains(const QUrl& url_loop) const {
+        return mModel->contains(get_url_no_fragment(url_loop));
     }
 
 }

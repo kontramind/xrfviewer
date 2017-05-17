@@ -28,11 +28,12 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
 
     public slots:
         void addLoopUrl(const QUrl& url_loop);
+        bool contains(const std::string &url_loop) const;
         CineLoopRef *CineLoop(const std::string &url_loop);
-        int loopFrameCount(const std::string &url_loop);
-        int loopCurrentFrameNo(const std::string &url_loop);
-        int loopFrameDisplayRate(const std::string &url_loop);
-        QString loopDcmTagValuesHtml(const std::string &url_loop);
+        int loopFrameCount(const std::string &url_loop) const;
+        int loopCurrentFrameNo(const std::string &url_loop) const;
+        int loopFrameDisplayRate(const std::string &url_loop) const;
+        QString loopDcmTagValuesHtml(const std::string &url_loop) const;
 
     protected:
         QHash<int, QByteArray> roleNames() const;    

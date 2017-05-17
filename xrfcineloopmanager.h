@@ -23,13 +23,13 @@ class CineLoopListModel;
         CineLoopRef *CineLoop(const QUrl &url_loop);
 
     public slots:
-        void addLoopUrl(const QUrl& url_loop);
-        int loopFrameCount(const QUrl& url_loop);
-        int loopCurrentFrameNo(const QUrl& url_loop);
-        int loopFrameDisplayRate(const QUrl& url_loop);
-        QString loopDcmTagValuesHtml(const QUrl& url_loop);
         CineLoopListModel* model();
-
+        void addLoopUrl(const QUrl& url_loop);
+        bool contains(const QUrl &url_loop) const;
+        int loopFrameCount(const QUrl& url_loop) const;
+        int loopCurrentFrameNo(const QUrl& url_loop) const;
+        int loopFrameDisplayRate(const QUrl& url_loop) const;
+        QString loopDcmTagValuesHtml(const QUrl& url_loop) const;
 
     private:
         std::unique_ptr<CineLoopListModel> mModel{nullptr};

@@ -14,6 +14,8 @@ ApplicationWindow {
         return value.toString().substring("image://xrfimage/".length)
     }
 
+    property string curr_loop_url: remove_image_prefix(xrf_img.source)
+
         Rectangle {
             id: rect_hdr
             visible: true
@@ -27,12 +29,11 @@ ApplicationWindow {
 
             Text{
                 id: txt_header
-                property string curr_xrf_loop_url: remove_image_prefix(xrf_img.source)
                 text:
                     "<table border='1' align='center'>" +
                        "<tr bgcolor='#9acd32'>" +
-                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(curr_xrf_loop_url) + "</td>" +
-                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(curr_xrf_loop_url) + "</td> </tr>"
+                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(curr_loop_url) + "</td>" +
+                       "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(curr_loop_url) + "</td> </tr>"
                 textFormat: Text.RichText
                 anchors.centerIn: parent
                 color: "red"
@@ -56,7 +57,7 @@ ApplicationWindow {
 
         Text {
             id: txt_info
-            text: xrfCineLoopManager.loopDcmTagValuesHtml(xrf_img.curr_url)
+            text: xrfCineLoopManager.loopDcmTagValuesHtml(curr_loop_url)
             textFormat: Text.RichText
             anchors.centerIn: parent
             color: "red"
@@ -134,11 +135,11 @@ ApplicationWindow {
                 break;
             case Qt.Key_Right:
                 main_timer.running = false
-                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.loopFrameCount(xrf_img.curr_url) ? 0 : xrf_img.current_image + 1
+                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.loopFrameCount(curr_loop_url) ? 0 : xrf_img.current_image + 1
                 break;
             case Qt.Key_Left:
                 main_timer.running = false
-                xrf_img.current_image = xrf_img.current_image - 1 < 0 ? xrfCineLoopManager.loopFrameCount(xrf_img.curr_url) - 1 : xrf_img.current_image - 1
+                xrf_img.current_image = xrf_img.current_image - 1 < 0 ? xrfCineLoopManager.loopFrameCount(curr_loop_url) - 1 : xrf_img.current_image - 1
                 break;
             case Qt.Key_I:
                 rect_hdr.visible = !rect_hdr.visible
@@ -159,11 +160,11 @@ ApplicationWindow {
 
         Timer {
             id: main_timer
-            interval: 1000.0/xrfCineLoopManager.loopFrameDisplayRate(xrf_img.curr_url)
+            interval: 1000.0/xrfCineLoopManager.loopFrameDisplayRate(curr_loop_url)
             repeat: true
             running: false
             onTriggered: {
-                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.loopFrameCount(xrf_img.curr_url) ? 0 : xrf_img.current_image + 1
+                xrf_img.current_image = xrf_img.current_image + 1 >= xrfCineLoopManager.loopFrameCount(curr_loop_url) ? 0 : xrf_img.current_image + 1
             }
         }
     }

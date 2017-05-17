@@ -4,10 +4,13 @@
 #include <QSharedPointer>
 #include <QAbstractListModel>
 
+#include <unordered_map>
+
 namespace xrf {
 
 class CineLoopRef;
 class CineLoopManager;
+using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
 
     class CineLoopListModel : public QAbstractListModel
     {
@@ -24,15 +27,22 @@ class CineLoopManager;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
     public slots:
-        void addLoopUrl(const QUrl& loopurl);
+        void addLoopUrl(const QUrl& url_loop);
+        CineLoopRef *CineLoop(const std::string &url_loop);
+        int loopFrameCount(const std::string &url_loop);
+        int loopCurrentFrameNo(const std::string &url_loop);
+        int loopFrameDisplayRate(const std::string &url_loop);
+        QString loopDcmTagValuesHtml(const std::string &url_loop);
 
     protected:
-        QHash<int, QByteArray> roleNames() const;
+        QHash<int, QByteArray> roleNames() const;    
+        void open_cine_loop(const QUrl &url_loop);
 
     private:
-        CineLoopManager* mManager{nullptr};
-        QHash<QUrl, int> mUrltoIndex;
         QList<QUrl> mLoopUrlList;
+        CineLoopMap mCineLoopMap;
+        QHash<QUrl, int> mUrltoIndex;
+        CineLoopManager* mManager{nullptr};
     };
 
 }

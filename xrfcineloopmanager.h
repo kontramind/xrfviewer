@@ -15,8 +15,6 @@ namespace xrf {
 
 class CineLoopListModel;
 
-using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
-
     class CineLoopManager : public QObject
     {
         Q_OBJECT
@@ -34,9 +32,6 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
 
 
     private:
-        void open_cine_loop(const QUrl& url_loop);
-
-        CineLoopMap mCineLoopMap;
         std::unique_ptr<CineLoopListModel> mModel{nullptr};
     };
 }

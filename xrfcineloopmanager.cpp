@@ -7,15 +7,6 @@
 
 namespace xrf {
 
-QString get_filepath(const QUrl& loop_url) {
-    return loop_url.adjusted(QUrl::PreferLocalFile
-                             | QUrl::RemoveAuthority
-                             | QUrl::StripTrailingSlash
-                             | QUrl::RemoveScheme
-                             | QUrl::RemoveFragment
-                             | QUrl::NormalizePathSegments)
-            .path().remove(0,1);
-}
 
 std::string get_url_no_fragment(const QUrl& loop_url) {
     return loop_url.adjusted(QUrl::RemoveFragment).toString().toStdString();
@@ -25,69 +16,31 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         mModel = std::make_unique<CineLoopListModel>(this);
     }
 
-    void CineLoopManager::addLoopUrl(const QUrl& url_loop) {
-        open_cine_loop(url_loop);
-        mModel->addLoopUrl(url_loop);
-    }
-
-    int CineLoopManager::loopFrameCount(const QUrl& url_loop) {
-        auto url_no_fragment = get_url_no_fragment(url_loop);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit == mCineLoopMap.cend())
-            return 0;
-        return cit->second.FrameCount();
-    }
-
-    int CineLoopManager::loopCurrentFrameNo(const QUrl& url_loop) {
-        auto url_no_fragment = get_url_no_fragment(url_loop);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit == mCineLoopMap.cend())
-            return 0;
-        return cit->second.CurrentFrameNo();
-    }
-
     CineLoopListModel *CineLoopManager::model() {
         if(mModel)
             return mModel.get();
-        else
-            return nullptr;
+        return nullptr;
+    }
+
+    void CineLoopManager::addLoopUrl(const QUrl& url_loop) {
+        mModel->addLoopUrl(url_loop.adjusted(QUrl::RemoveFragment));
+    }
+
+    int CineLoopManager::loopFrameCount(const QUrl& url_loop) {
+        return mModel->loopFrameCount(get_url_no_fragment(url_loop));
+    }
+    int CineLoopManager::loopCurrentFrameNo(const QUrl& url_loop) {
+        return mModel->loopCurrentFrameNo(get_url_no_fragment(url_loop));
+    }
+    int CineLoopManager::loopFrameDisplayRate(const QUrl& url_loop) {
+        return mModel->loopFrameDisplayRate(get_url_no_fragment(url_loop));
+    }
+    QString CineLoopManager::loopDcmTagValuesHtml(const QUrl &url_loop) {
+        return mModel->loopDcmTagValuesHtml(get_url_no_fragment(url_loop));
     }
 
     CineLoopRef *CineLoopManager::CineLoop(const QUrl& url_loop) {
-        auto url_no_fragment = get_url_no_fragment(url_loop);
-        CineLoopMap::iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit == mCineLoopMap.cend())
-            return nullptr;
-        return &cit->second;
-    }
-
-    int CineLoopManager::loopFrameDisplayRate(const QUrl& url_loop) {
-        auto url_no_fragment = get_url_no_fragment(url_loop);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit == mCineLoopMap.cend())
-            return 1;
-        return cit->second.FrameDisplayRate();
-    }
-
-    QString CineLoopManager::loopDcmTagValuesHtml(const QUrl &url_loop) {
-        auto url_no_fragment = get_url_no_fragment(url_loop);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit != mCineLoopMap.cend())
-            return cit->second.DcmValuesAsHtml();
-        return {};
-    }
-
-    void CineLoopManager::open_cine_loop(const QUrl &url_loop) {
-        auto url_no_fragment = get_url_no_fragment(url_loop);
-        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-        if(cit == mCineLoopMap.cend()) {
-            // create and insert
-            auto result =  mCineLoopMap.insert(std::make_pair(url_no_fragment, CineLoopRef(url_loop, std::move(CineLoop::CreatePtr(get_filepath(url_loop))))) );
-            if(result.second)
-                qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_OK";
-            else
-                qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_FAIL";
-        }
+        return mModel->CineLoop(get_url_no_fragment(url_loop));
     }
 
 }

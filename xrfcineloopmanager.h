@@ -20,7 +20,8 @@ class CineLoopListModel;
         Q_OBJECT
     public:
         CineLoopManager(QObject *parent = 0);
-        CineLoopRef *CineLoop(const QUrl &url_loop);
+//        CineLoopRef *CineLoop(const QUrl &url_loop);
+        QImage GetFrame(const QUrl& url_loop, int frameNo);
 
     public slots:
         CineLoopListModel* model();

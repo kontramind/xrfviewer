@@ -74,6 +74,17 @@ static QString  get_filepath(const QUrl& loop_url) {
         return QVariant();
     }
 
+    QImage CineLoopListModel::GetFrame(const std::string &url_loop, int frameNo)
+    {
+        CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);
+        if(cit == mCineLoopMap.end())
+            return QImage();
+        auto img = QImage(*(cit->second.GetFrame(frameNo)));
+        int row = mUrltoIndex [QUrl(QString(url_loop.c_str()))];
+        emit dataChanged(index(row), index(row));
+        return img;
+    }
+
     CineLoopRef *CineLoopListModel::CineLoop(const std::string& url_loop) {
         CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);
         if(cit == mCineLoopMap.cend())

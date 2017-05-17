@@ -38,8 +38,11 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     QString CineLoopManager::loopDcmTagValuesHtml(const QUrl &url_loop) const {
         return mModel->loopDcmTagValuesHtml(get_url_no_fragment(url_loop));
     }
-    CineLoopRef *CineLoopManager::CineLoop(const QUrl& url_loop) {
-        return mModel->CineLoop(get_url_no_fragment(url_loop));
+//    CineLoopRef *CineLoopManager::CineLoop(const QUrl& url_loop) {
+//        return mModel->CineLoop(get_url_no_fragment(url_loop));
+//    }
+    QImage CineLoopManager::GetFrame(const QUrl& url_loop, int frameNo) {
+        return mModel->GetFrame(get_url_no_fragment(url_loop), frameNo);
     }
     bool CineLoopManager::contains(const QUrl& url_loop) const {
         return mModel->contains(get_url_no_fragment(url_loop));

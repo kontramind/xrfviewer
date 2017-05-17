@@ -21,30 +21,13 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     return loop_url.adjusted(QUrl::RemoveFragment).toString().toStdString();
 }
 
-    CineLoopManager::CineLoopManager(QObject *parent)
-        : QObject(parent) {
+    CineLoopManager::CineLoopManager(QObject *parent) : QObject(parent) {
         mModel = std::make_unique<CineLoopListModel>(this);
     }
 
-    QUrl CineLoopManager::loopUrl() const {
-        return mLoopUrl;
-    }
-
-    void CineLoopManager::setLoopUrl(const QUrl& url_loop) {
-        mLoopUrl = url_loop;
-        open_cine_loop();
-//        read_loop_dcmtagvalues_html();
-    }
-
-    const int CineLoopManager::loopCount() const {
-        return mCineLoopMap.size();
-    }
-
     void CineLoopManager::addLoopUrl(const QUrl& url_loop) {
-        mLoopUrl = url_loop;
-        open_cine_loop();
-//        read_loop_dcmtagvalues_html();
-        mModel->addLoopUrl(mLoopUrl);
+        open_cine_loop(url_loop);
+        mModel->addLoopUrl(url_loop);
     }
 
     int CineLoopManager::loopFrameCount(const QUrl& url_loop) {
@@ -94,27 +77,17 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
         return {};
     }
 
-    void CineLoopManager::open_cine_loop() {
-        auto url_no_fragment = get_url_no_fragment(mLoopUrl);
+    void CineLoopManager::open_cine_loop(const QUrl &url_loop) {
+        auto url_no_fragment = get_url_no_fragment(url_loop);
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
         if(cit == mCineLoopMap.cend()) {
             // create and insert
-            auto result =  mCineLoopMap.insert(std::make_pair(url_no_fragment, CineLoopRef(mLoopUrl, std::move(CineLoop::CreatePtr(get_filepath(mLoopUrl))))) );
+            auto result =  mCineLoopMap.insert(std::make_pair(url_no_fragment, CineLoopRef(url_loop, std::move(CineLoop::CreatePtr(get_filepath(url_loop))))) );
             if(result.second)
                 qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_OK";
             else
                 qDebug() << "inserted:" << url_no_fragment.c_str() << ":S_FAIL";
         }
-        emit loopUrlChanged();
     }
-
-//    void CineLoopManager::read_loop_dcmtagvalues_html() {
-//        mLoopDcmTagValuesHtml = "";
-//        auto url_no_fragment = get_url_no_fragment(mLoopUrl);
-//        CineLoopMap::const_iterator cit = mCineLoopMap.find(url_no_fragment);
-//        if(cit != mCineLoopMap.cend())
-//            mLoopDcmTagValuesHtml = cit->second.GetDcmValuesAsHtml();
-//        emit loopDcmTagValuesHtmlChanged();
-//    }
 
 }

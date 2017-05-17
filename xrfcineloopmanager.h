@@ -22,15 +22,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         Q_OBJECT
     public:
         CineLoopManager(QObject *parent = 0);
-
-        QUrl loopUrl() const;
-        void setLoopUrl(const QUrl& url_Loop);
-        const int loopCount() const;
-
         CineLoopRef *CineLoop(const QUrl &url_loop);
-
-    signals:
-        void loopUrlChanged();
 
     public slots:
         void addLoopUrl(const QUrl& url_loop);
@@ -42,11 +34,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
 
 
     private:
-        void open_cine_loop();
-//        void read_loop_dcmtagvalues_html();
-
-        QUrl mLoopUrl{""};
-        QString mLoopDcmTagValuesHtml{""};
+        void open_cine_loop(const QUrl& url_loop);
 
         CineLoopMap mCineLoopMap;
         std::unique_ptr<CineLoopListModel> mModel{nullptr};

@@ -20,7 +20,7 @@ class CineLoopListModel;
         Q_OBJECT
     public:
         CineLoopManager(QObject *parent = 0);
-        QImage GetFrame(const QUrl& url_loop, int frameNo);
+//        QImage GetFrame(const QUrl& url_loop, int frameNo);
 
         CineLoopListModel* model();
 
@@ -30,6 +30,10 @@ class CineLoopListModel;
         Q_INVOKABLE int loopCurrentFrameNo(const QUrl& url_loop) const;
         Q_INVOKABLE int loopFrameDisplayRate(const QUrl& url_loop) const;
         Q_INVOKABLE QString loopDcmTagValuesHtml(const QUrl& url_loop) const;
+
+        Q_INVOKABLE void setCurrentFrameNo(const QUrl& url_loop, const int frameNo);
+        QImage GetCurrentFrame(const QUrl& url_loop);
+
     public slots:
 
     signals:

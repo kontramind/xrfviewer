@@ -6,19 +6,20 @@ import QtQuick.Dialogs 1.2
 ApplicationWindow {
     id: root
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("XRF Image Sequence Test")
+    width: 640*2
+    height: 480*2
+    title: qsTr("XRF Cine Loop Viewer")
 
     property int curr_frame_no: 0
     property string curr_loop_url: ""
     function nextimage() {
         if(xrfCineLoopManager.loopFrameCount(curr_loop_url) === 0)
-            curr_frame_no = 0
+             curr_frame_no = 0
         else if(curr_frame_no + 1 === xrfCineLoopManager.loopFrameCount(curr_loop_url))
             curr_frame_no = 0
         else
             ++curr_frame_no
+        xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
     }
     function previmage() {
         if(xrfCineLoopManager.loopFrameCount(curr_loop_url) === 0)
@@ -27,6 +28,7 @@ ApplicationWindow {
             curr_frame_no = xrfCineLoopManager.loopFrameCount(curr_loop_url) - 1
         else
             --curr_frame_no;
+        xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
     }
 
     Rectangle {
@@ -101,9 +103,10 @@ ApplicationWindow {
             id: xrfSimpleDelegate
             Row {
                 spacing: 10
-                Text { color: "white"; text: url; font.pointSize: 12; width: rect_model.width * 0.8; elide: Text.ElideMiddle; }
-                Text { color: "white"; text: currentframeno; font.pointSize: 12 }
-                Text { color: "white"; text: framecount; font.pointSize: 12 }
+                Image { id:xrfthumbnail; width: 256; height: 256; fillMode: Image.PreserveAspectFit; source: "image://xrfimage/" + currentframeimage }
+                Text { color: "white"; text: url; font.italic: true; font.pointSize: 12; elide: Text.ElideMiddle; anchors.verticalCenter: xrfthumbnail.verticalCenter }
+                Text { color: "white"; text: currentframeno; style: Text.Outline; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
+                Text { color: "white"; text: "/"+framecount; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
             }
         }
 
@@ -128,6 +131,7 @@ ApplicationWindow {
                 xrfCineLoopManager.addLoopUrl(dlg_open.fileUrl)
                 curr_loop_url = dlg_open.fileUrl
                 curr_frame_no = 0
+                xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
             }
             onRejected: {
                 main_timer.running = true

@@ -27,7 +27,8 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     }
 
     int CineLoopManager::loopFrameCount(const QUrl& url_loop) const {
-        return mModel->loopFrameCount(get_url_no_fragment(url_loop));
+        auto count = mModel->loopFrameCount(get_url_no_fragment(url_loop));
+        return count;
     }
     int CineLoopManager::loopCurrentFrameNo(const QUrl& url_loop) const {
         return mModel->loopCurrentFrameNo(get_url_no_fragment(url_loop));
@@ -42,7 +43,9 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
 //        return mModel->CineLoop(get_url_no_fragment(url_loop));
 //    }
     QImage CineLoopManager::GetFrame(const QUrl& url_loop, int frameNo) {
-        return mModel->GetFrame(get_url_no_fragment(url_loop), frameNo);
+        auto img = mModel->GetFrame(get_url_no_fragment(url_loop), frameNo);
+        emit dataChanged();
+        return img;
     }
     bool CineLoopManager::contains(const QUrl& url_loop) const {
         return mModel->contains(get_url_no_fragment(url_loop));

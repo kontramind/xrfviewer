@@ -22,19 +22,19 @@ class CineLoopListModel;
         CineLoopManager(QObject *parent = 0);
         QImage GetFrame(const QUrl& url_loop, int frameNo);
 
+        CineLoopListModel* model();
+
+        Q_INVOKABLE void addLoopUrl(const QUrl& url_loop);
         Q_INVOKABLE bool contains(const QUrl &url_loop) const;
         Q_INVOKABLE int loopFrameCount(const QUrl& url_loop) const;
         Q_INVOKABLE int loopCurrentFrameNo(const QUrl& url_loop) const;
+        Q_INVOKABLE int loopFrameDisplayRate(const QUrl& url_loop) const;
+        Q_INVOKABLE QString loopDcmTagValuesHtml(const QUrl& url_loop) const;
     public slots:
-        CineLoopListModel* model();
-        void addLoopUrl(const QUrl& url_loop);
-
-
-
-        int loopFrameDisplayRate(const QUrl& url_loop) const;
-        QString loopDcmTagValuesHtml(const QUrl& url_loop) const;
 
     signals:
+        // emited whenever
+        // state becomes dirty
         void dataChanged() const;
 
     private:

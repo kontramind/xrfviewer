@@ -31,7 +31,8 @@ int get_frame_no(const QUrl& loop_url) {
         if(!mCineLoopManager || !mCineLoopManager->contains(url_loop))
             return xrfFrame;
         auto frameno = get_frame_no({url_loop});
-        return mCineLoopManager->GetFrame(url_loop, frameno);
+        //return mCineLoopManager->GetFrame(url_loop, frameno);
+        return mCineLoopManager->GetCurrentFrame(url_loop);
     }
 
 }

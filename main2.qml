@@ -10,8 +10,24 @@ ApplicationWindow {
     height: 480
     title: qsTr("XRF Image Sequence Test")
 
+    property int curr_frame_no: 0
     property string curr_loop_url: ""
-
+    function nextimage() {
+        if(xrfCineLoopManager.loopFrameCount(curr_loop_url) === 0)
+            curr_frame_no = 0
+        else if(curr_frame_no + 1 === xrfCineLoopManager.loopFrameCount(curr_loop_url))
+            curr_frame_no = 0
+        else
+            ++curr_frame_no
+    }
+    function previmage() {
+        if(xrfCineLoopManager.loopFrameCount(curr_loop_url) === 0)
+            curr_frame_no = 0
+        else if (curr_frame_no - 1 < 0)
+            curr_frame_no = xrfCineLoopManager.loopFrameCount(curr_loop_url) - 1
+        else
+            --curr_frame_no;
+    }
 
     Rectangle {
         id: rect_hdr
@@ -111,7 +127,7 @@ ApplicationWindow {
             onAccepted: {
                 xrfCineLoopManager.addLoopUrl(dlg_open.fileUrl)
                 curr_loop_url = dlg_open.fileUrl
-                xrf_img.current_image = 0
+                curr_frame_no = 0
             }
             onRejected: {
                 main_timer.running = true
@@ -121,27 +137,8 @@ ApplicationWindow {
             id: xrf_img
             cache: false
             anchors.fill: parent
-            property string curr_url: ""
-            property int current_image: 0
             fillMode: Image.PreserveAspectFit
-            source: "image://xrfimage/" + curr_loop_url + "#" + current_image
-
-            function nextimage() {
-                if(xrfCineLoopManager.loopFrameCount(curr_loop_url) === 0)
-                    current_image = 0
-                else if(current_image + 1 === xrfCineLoopManager.loopFrameCount(curr_loop_url))
-                    current_image = 0
-                else
-                    current_image = current_image + 1
-            }
-            function previmage() {
-                if(xrfCineLoopManager.loopFrameCount(curr_loop_url) === 0)
-                    current_image = 0
-                else if (current_image - 1 < 0)
-                    current_image = xrfCineLoopManager.loopFrameCount(curr_loop_url) - 1
-                else
-                    --current_image;
-            }
+            source: "image://xrfimage/" + curr_loop_url + "#" + curr_frame_no
         }
 
         Keys.onSpacePressed: {
@@ -156,11 +153,11 @@ ApplicationWindow {
                 break;
             case Qt.Key_Right:
                 main_timer.running = false
-                xrf_img.nextimage()
+                nextimage()
                 break;
             case Qt.Key_Left:
                 main_timer.running = false
-                xrf_img.previmage()
+                previmage()
                 break;
             case Qt.Key_I:
                 rect_hdr.visible = !rect_hdr.visible
@@ -185,7 +182,7 @@ ApplicationWindow {
             repeat: true
             running: false
             onTriggered: {
-                xrf_img.nextimage()
+                nextimage()
             }
         }
     }

@@ -27,9 +27,9 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         int rowCount(const QModelIndex & parent = QModelIndex()) const;
         QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
-        //QImage GetFrame(const std::string &url_loop, int frameNo);
         void SetCurrentFrameNo(const std::string &url_loop, const int frameNo);
         QImage GetCurrentFrame(const std::string &url_loop);
+        QImage GetFrame(const std::string &url_loop, int frameNo);
 
     public slots:
         void addLoopUrl(const QUrl& url_loop);

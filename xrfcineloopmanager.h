@@ -13,17 +13,18 @@
 
 namespace xrf {
 
+class ImageProvider;
+
 class CineLoopListModel;
 
     class CineLoopManager : public QObject
     {
         Q_OBJECT
     public:
+        friend class ImageProvider;
         CineLoopManager(QObject *parent = 0);
-//        QImage GetFrame(const QUrl& url_loop, int frameNo);
 
         CineLoopListModel* model();
-
         Q_INVOKABLE void addLoopUrl(const QUrl& url_loop);
         Q_INVOKABLE bool contains(const QUrl &url_loop) const;
         Q_INVOKABLE int loopFrameCount(const QUrl& url_loop) const;
@@ -42,6 +43,8 @@ class CineLoopListModel;
         void dataChanged() const;
 
     private:
+        QImage GetFrame(const QUrl& url_loop, int frameNo);
+
         std::unique_ptr<CineLoopListModel> mModel{nullptr};
     };
 }

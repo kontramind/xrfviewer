@@ -19,8 +19,8 @@ public:
     const xrf::CineLoop* CineLoop() const;
     const DcmTagValues& GetDcmValues() const;
     const QString DcmValuesAsHtml() const;
-//    const QSharedPointer<QImage>& GetFrame(int frmNo);
     const QSharedPointer<QImage>& GetCurrentFrame();
+    const QSharedPointer<QImage>& GetFrame(int frmNo);
 private:
     QUrl mUrl{""};
     int mCurrentFrmNo{0};

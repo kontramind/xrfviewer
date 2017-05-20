@@ -80,16 +80,6 @@ static QString  get_filepath(const QUrl& loop_url) {
         }
         return QVariant();
     }
-
-//    QImage CineLoopListModel::GetFrame(const std::string &url_loop, int frameNo)
-//    {
-//        CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);
-//        if(cit == mCineLoopMap.end())
-//            return QImage();
-//        auto img = QImage(*(cit->second.GetFrame(frameNo)));
-//        return img;
-//    }
-
     void CineLoopListModel::SetCurrentFrameNo(const std::string &url_loop, const int frameNo)
     {
         CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);
@@ -105,6 +95,13 @@ static QString  get_filepath(const QUrl& loop_url) {
         if(cit == mCineLoopMap.end())
             return QImage();
         return QImage(*(cit->second.GetCurrentFrame()));
+    }
+    QImage CineLoopListModel::GetFrame(const std::string &url_loop, int frameNo)
+    {
+        CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);
+        if(cit == mCineLoopMap.end())
+            return QImage();
+        return QImage(*(cit->second.GetFrame(frameNo)));
     }
 
     CineLoopRef *CineLoopListModel::CineLoop(const std::string& url_loop) {

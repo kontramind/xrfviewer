@@ -7,9 +7,6 @@ namespace xrf {
         mLoop.swap(loop);
     }
 
-//    const QSharedPointer<QImage> &CineLoopRef::GetFrame(int frameNo) {
-//        return mLoop->GetFrames().at(frameNo);
-//    }
 
     const QUrl CineLoopRef::Url() const {
         return mUrl;
@@ -21,6 +18,10 @@ namespace xrf {
 
     const int CineLoopRef::GetCurrentFrameNo() const {
         return mCurrentFrmNo;
+    }
+
+    const QSharedPointer<QImage> &CineLoopRef::GetFrame(int frameNo) {
+        return mLoop->GetFrames().at(frameNo);
     }
 
     const QSharedPointer<QImage> &CineLoopRef::GetCurrentFrame() {

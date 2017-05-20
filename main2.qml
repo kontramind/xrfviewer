@@ -101,7 +101,7 @@ ApplicationWindow {
             id: xrfSimpleDelegate
             Row {
                 spacing: 10
-                Text { color: "white"; text: url; font.pointSize: 12 }
+                Text { color: "white"; text: url; font.pointSize: 12; width: rect_model.width * 0.8; elide: Text.ElideMiddle; }
                 Text { color: "white"; text: currentframeno; font.pointSize: 12 }
                 Text { color: "white"; text: framecount; font.pointSize: 12 }
             }

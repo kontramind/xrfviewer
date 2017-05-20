@@ -13,40 +13,39 @@ ApplicationWindow {
     property string curr_loop_url: ""
 
 
-        Rectangle {
-            id: rect_hdr
-            visible: true
-            parent: ApplicationWindow.overlay
-            anchors.top: parent.top
-            anchors.left: parent.left
-            width: ApplicationWindow.contentItem.width
-            height: 30
-            color: "lightgray"
-            opacity: 0.5
+    Rectangle {
+        id: rect_hdr
+        visible: true
+        parent: ApplicationWindow.overlay
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: ApplicationWindow.contentItem.width
+        height: 30
+        color: "lightgray"
+        opacity: 0.5
 
-            Text{
-                id: txt_header
-                text: ""
-                textFormat: Text.RichText
-                anchors.centerIn: parent
-                color: "red"
-                font.bold: true
-                font.pointSize: 12
-                Keys.enabled: false
+        Text{
+            id: txt_header
+            text: ""
+            textFormat: Text.RichText
+            anchors.centerIn: parent
+            color: "red"
+            font.bold: true
+            font.pointSize: 12
+            Keys.enabled: false
 
-                Connections {
-                        target: xrfCineLoopManager
-                        onDataChanged: {
-                            txt_header.text =
-                                    "<table border='1' align='center'>" +
-                                    "<tr bgcolor='#9acd32'>" +
-                                    "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(curr_loop_url) + "</td>" +
-                                    "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(curr_loop_url) + "</td> </tr>"
-
-                        }
+            Connections {
+                target: xrfCineLoopManager
+                onDataChanged: {
+                    txt_header.text =
+                            "<table border='1' align='center'>" +
+                            "<tr bgcolor='#9acd32'>" +
+                            "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopCurrentFrameNo(curr_loop_url) + "</td>" +
+                            "<td width='50' min-width='50' align='center'>" + xrfCineLoopManager.loopFrameCount(curr_loop_url) + "</td> </tr>"
                 }
             }
         }
+    }
 
     Rectangle {
         id: rect_info
@@ -89,7 +88,6 @@ ApplicationWindow {
                 Text { color: "white"; text: url; font.pointSize: 12 }
                 Text { color: "white"; text: currentframeno; font.pointSize: 12 }
                 Text { color: "white"; text: framecount; font.pointSize: 12 }
-
             }
         }
 
@@ -111,9 +109,9 @@ ApplicationWindow {
             title: "Select an image"
             nameFilters: ["*.dcm"]
             onAccepted: {
-                xrf_img.current_image = 0
                 xrfCineLoopManager.addLoopUrl(dlg_open.fileUrl)
                 curr_loop_url = dlg_open.fileUrl
+                xrf_img.current_image = 0
             }
             onRejected: {
                 main_timer.running = true
@@ -199,7 +197,6 @@ ApplicationWindow {
             anchors.fill : parent
             onClicked: {
                 main_timer.running = false
-                xrf_img.current_image = 0
                 dlg_open.open()
             }
         }

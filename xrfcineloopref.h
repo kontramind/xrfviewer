@@ -10,14 +10,17 @@ class CineLoopRef {
 public:
     CineLoopRef(const QUrl loopurl, std::unique_ptr<xrf::CineLoop>&& loop);
 
+    void SetCurrentFrameNo(int frameNo);
+    const int GetCurrentFrameNo() const;
+
     const QUrl Url() const;
     const int FrameCount() const;
-    const int CurrentFrameNo() const;
     const int FrameDisplayRate() const;
     const xrf::CineLoop* CineLoop() const;
     const DcmTagValues& GetDcmValues() const;
     const QString DcmValuesAsHtml() const;
-    const QSharedPointer<QImage>& GetFrame(int frmNo);
+//    const QSharedPointer<QImage>& GetFrame(int frmNo);
+    const QSharedPointer<QImage>& GetCurrentFrame();
 private:
     QUrl mUrl{""};
     int mCurrentFrmNo{0};

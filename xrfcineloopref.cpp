@@ -7,17 +7,24 @@ namespace xrf {
         mLoop.swap(loop);
     }
 
-    const QSharedPointer<QImage> &CineLoopRef::GetFrame(int frmNo) {
-        mCurrentFrmNo = frmNo;
-        return mLoop->GetFrames().at(mCurrentFrmNo);
-    }
+//    const QSharedPointer<QImage> &CineLoopRef::GetFrame(int frameNo) {
+//        return mLoop->GetFrames().at(frameNo);
+//    }
 
     const QUrl CineLoopRef::Url() const {
         return mUrl;
     }
 
-    const int CineLoopRef::CurrentFrameNo() const {
+    void CineLoopRef::SetCurrentFrameNo(int frameNo) {
+        mCurrentFrmNo = frameNo;
+    }
+
+    const int CineLoopRef::GetCurrentFrameNo() const {
         return mCurrentFrmNo;
+    }
+
+    const QSharedPointer<QImage> &CineLoopRef::GetCurrentFrame() {
+        return mLoop->GetFrames().at(mCurrentFrmNo);
     }
 
     const int CineLoopRef::FrameDisplayRate() const {

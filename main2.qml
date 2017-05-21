@@ -10,6 +10,7 @@ ApplicationWindow {
     height: 480*2
     title: qsTr("XRF Cine Loop Viewer")
 
+    property int commonDisplayFrameRate: 10
     property int curr_frame_no: 0
     property string curr_loop_url: ""
     function nextimage() {
@@ -191,7 +192,7 @@ ApplicationWindow {
                     main_timer.interval = 1000.0/xrfCineLoopManager.loopFrameDisplayRate(curr_loop_url)
                     nextimage()
                 } else {
-                    main_timer.interval = 1000.0/10
+                    main_timer.interval = 1000.0/root.commonDisplayFrameRate
                     xrfCineLoopManager.incrementCurrentFrameNoForAllLoops()
                 }
             }

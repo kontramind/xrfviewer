@@ -74,6 +74,7 @@ static QString  get_filepath(const QUrl& loop_url) {
             return loopCurrentFrameNo(url.toString().toStdString());
         case CurrentFrameImageRole:
             url.setFragment(QString::number(loopCurrentFrameNo(url.toString().toStdString())));
+            qDebug() << "url:" << url;
             return url;
         default:
             break;
@@ -89,6 +90,22 @@ static QString  get_filepath(const QUrl& loop_url) {
         int row = mUrltoIndex[QUrl(QString(url_loop.c_str()))];
         emit dataChanged(index(row), index(row));
     }
+
+    void CineLoopListModel::IncrementCurrentFrameNoForAllLoops()
+    {
+        for(CineLoopMap::iterator it = mCineLoopMap.begin(); it != mCineLoopMap.end(); ++it) {
+            auto currFrmCnt = it->second.FrameCount();
+            auto currFrmNo = it->second.GetCurrentFrameNo();
+            currFrmNo = currFrmNo + 1 == currFrmCnt ? 0 : currFrmNo+1;
+
+            it->second.SetCurrentFrameNo(currFrmNo);
+            QUrl url = it->second.Url();
+            qDebug() << "currFrmNo:" << currFrmNo << " for: " << url;
+            int row = mUrltoIndex[url];
+            emit dataChanged(index(row), index(row));
+        }
+    }
+
     QImage CineLoopListModel::GetCurrentFrame(const std::string &url_loop)
     {
         CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);

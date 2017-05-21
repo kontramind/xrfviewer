@@ -30,6 +30,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         void SetCurrentFrameNo(const std::string &url_loop, const int frameNo);
         QImage GetCurrentFrame(const std::string &url_loop);
         QImage GetFrame(const std::string &url_loop, int frameNo);
+        void IncrementCurrentFrameNoForAllLoops();
 
     public slots:
         void addLoopUrl(const QUrl& url_loop);

@@ -103,7 +103,9 @@ ApplicationWindow {
             id: xrfSimpleDelegate
             Row {
                 spacing: 10
-                Image { id:xrfthumbnail; width: 256; height: 256; fillMode: Image.PreserveAspectFit; source: "image://xrfimage/" + currentframeimage }
+                Image {
+                    id:xrfthumbnail; width: 256; height: 256; fillMode: Image.PreserveAspectFit; source: "image://xrfimage/" + currentframeimage
+                }
                 Text { color: "white"; text: url; font.italic: true; font.pointSize: 12; elide: Text.ElideMiddle; anchors.verticalCenter: xrfthumbnail.verticalCenter }
                 Text { color: "white"; text: currentframeno; style: Text.Outline; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
                 Text { color: "white"; text: "/"+framecount; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
@@ -168,11 +170,10 @@ ApplicationWindow {
                 rect_info.visible = !rect_info.visible
                 break;
             case Qt.Key_M:
+                main_timer.running = false;
                 rect_model.visible = !rect_model.visible
-                rect_hdr.visible = false
+                rect_hdr.visible = !rect_model.visible
                 rect_info.visible = false
-                if(!rect_model.visible)
-                    rect_hdr.visible = true
                 break;
             default:
                 break;
@@ -186,7 +187,13 @@ ApplicationWindow {
             repeat: true
             running: false
             onTriggered: {
-                nextimage()
+                if(!rect_model.visible) {
+                    main_timer.interval = 1000.0/xrfCineLoopManager.loopFrameDisplayRate(curr_loop_url)
+                    nextimage()
+                } else {
+                    main_timer.interval = 1000.0/10
+                    xrfCineLoopManager.incrementCurrentFrameNoForAllLoops()
+                }
             }
         }
     }

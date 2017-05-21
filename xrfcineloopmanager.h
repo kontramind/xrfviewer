@@ -35,6 +35,7 @@ class CineLoopListModel;
         Q_INVOKABLE void setCurrentFrameNo(const QUrl& url_loop, const int frameNo);
         QImage GetCurrentFrame(const QUrl& url_loop);
 
+        Q_INVOKABLE void incrementCurrentFrameNoForAllLoops();
     public slots:
 
     signals:

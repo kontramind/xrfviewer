@@ -100,6 +100,13 @@ static QString  get_filepath(const QUrl& loop_url) {
         }
     }
 
+    int CineLoopListModel::GetModelIndex(const QUrl &url_loop)
+    {
+        if(!mUrltoIndex.contains(url_loop))
+            return -1;
+        return mUrltoIndex[url_loop];
+    }
+
     QImage CineLoopListModel::GetCurrentFrame(const std::string &url_loop)
     {
         CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);

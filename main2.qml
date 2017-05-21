@@ -55,7 +55,7 @@ ApplicationWindow {
 
             Connections {
                 target: xrfCineLoopManager
-                onDataChanged: {
+                onDataChanged: {                    
                     txt_header.text =
                             "<table border='1' align='center'>" +
                             "<tr bgcolor='#9acd32'>" +
@@ -108,6 +108,7 @@ ApplicationWindow {
                 id: wrapper
                 width: ApplicationWindow.overlay.width; height: 256
                 Row {
+                    id: row_wrapper
                     spacing: 10
                     Rectangle { id:col_rect_img; width:256; height:256; color: "transparent"; border.color: "yellow";
                         Image { id:xrfthumbnail; width:250; height:250; anchors.centerIn:col_rect_img; source: "image://xrfimage/" + currentframeimage;  }
@@ -126,7 +127,13 @@ ApplicationWindow {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: wrapper.ListView.view.currentIndex = index
+                    onClicked: {
+                        wrapper.ListView.view.currentIndex = index
+                        curr_loop_url = col_url.text
+                        curr_frame_no = parseInt(col_frmno.text)
+                        xrfCineLoopManager.addLoopUrl(col_url.text)
+                        xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
+                    }
                 }
             }
         }
@@ -145,12 +152,9 @@ ApplicationWindow {
             verticalLayoutDirection: ListView.TopToBottom
             highlight: highlightBar
 
-            onCurrentItemChanged: {
-                console.log("onCurrentItemChanged : xrfModelListView.currentItem :", xrfModelListView.currentItem )
-            }
-            onCurrentIndexChanged: {
-                console.log("onCurrentIndexChanged : xrfModelListView.currentIndex :", xrfModelListView.currentIndex)
-            }
+//            onCurrentIndexChanged: {
+//                console.log("onCurrentIndexChanged : xrfModelListView.currentIndex :", xrfModelListView.currentIndex)
+//            }
         }
     }
 
@@ -208,6 +212,7 @@ ApplicationWindow {
                 rect_model.visible = !rect_model.visible
                 rect_hdr.visible = !rect_model.visible
                 rect_info.visible = false
+                xrfModelListView.currentIndex = xrfCineLoopManager.getModelIndex(curr_loop_url)
                 break;
             default:
                 break;

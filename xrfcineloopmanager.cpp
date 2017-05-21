@@ -55,6 +55,11 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     QImage CineLoopManager::GetFrame(const QUrl& url_loop, int frameNo) {
         return mModel->GetFrame(get_url_no_fragment(url_loop), frameNo);
     }
+
+    int CineLoopManager::getModelIndex(const QUrl& url_loop) {
+        return mModel->GetModelIndex(url_loop);
+    }
+
     bool CineLoopManager::contains(const QUrl& url_loop) const {
         return mModel->contains(get_url_no_fragment(url_loop));
     }

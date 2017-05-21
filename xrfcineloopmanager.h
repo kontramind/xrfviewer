@@ -36,6 +36,7 @@ class CineLoopListModel;
         QImage GetCurrentFrame(const QUrl& url_loop);
 
         Q_INVOKABLE void incrementCurrentFrameNoForAllLoops();
+        Q_INVOKABLE int getModelIndex(const QUrl& url_loop);
     public slots:
 
     signals:

@@ -100,15 +100,39 @@ ApplicationWindow {
         height: ApplicationWindow.contentItem.height
         color: "blue"
 
+        // Define a delegate component.  A component will be
+        // instantiated for each visible item in the list.
         Component {
             id: xrfSimpleDelegate
-            Row {
-                spacing: 10
-                Image { id:xrfthumbnail; width: 256; height: 256; fillMode: Image.PreserveAspectFit; source: "image://xrfimage/" + currentframeimage }
-                Text { color: "white"; text: url; font.italic: true; font.pointSize: 12; elide: Text.ElideMiddle; anchors.verticalCenter: xrfthumbnail.verticalCenter }
-                Text { color: "white"; text: currentframeno; style: Text.Outline; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
-                Text { color: "white"; text: "/"+framecount; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
+            Item {
+                id: wrapper
+                width: ApplicationWindow.overlay.width; height: 256
+                Row {
+                    spacing: 10
+                    Rectangle { id:col_rect_img; width:256; height:256; color: "transparent"; border.color: "yellow";
+                        Image { id:xrfthumbnail; width:250; height:250; anchors.centerIn:col_rect_img; source: "image://xrfimage/" + currentframeimage;  }
+                    }
+                    Text { id:col_url; color: "white"; text: url; font.italic: true; font.pointSize: 12; elide: Text.ElideMiddle; anchors.verticalCenter: col_rect_img.verticalCenter }
+                    Text { id:col_frmno; color: "white"; text: currentframeno; style: Text.Outline; font.pointSize: 12; anchors.verticalCenter: col_rect_img.verticalCenter }
+                    Text { id:col_frmcnt; color: "white"; text: "/"+framecount; font.pointSize: 12; anchors.verticalCenter: col_rect_img.verticalCenter }
+                }
+                states: State {
+                    name: "Current"
+                    when: wrapper.ListView.isCurrentItem
+                    PropertyChanges { target:col_rect_img; border.color: "red"; border.width: 4 }
+                    PropertyChanges { target:col_url; color: "black" }
+                    PropertyChanges { target:col_frmno; color: "black" }
+                    PropertyChanges { target:col_frmcnt; color: "black" }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: wrapper.ListView.view.currentIndex = index
+                }
             }
+        }
+        Component {
+            id: highlightBar
+            Rectangle { color: "yellow" }
         }
 
         ListView {
@@ -119,6 +143,14 @@ ApplicationWindow {
             spacing: 10
             orientation: ListView.Vertical
             verticalLayoutDirection: ListView.TopToBottom
+            highlight: highlightBar
+
+            onCurrentItemChanged: {
+                console.log("onCurrentItemChanged : xrfModelListView.currentItem :", xrfModelListView.currentItem )
+            }
+            onCurrentIndexChanged: {
+                console.log("onCurrentIndexChanged : xrfModelListView.currentIndex :", xrfModelListView.currentIndex)
+            }
         }
     }
 

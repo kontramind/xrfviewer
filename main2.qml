@@ -104,9 +104,7 @@ ApplicationWindow {
             id: xrfSimpleDelegate
             Row {
                 spacing: 10
-                Image {
-                    id:xrfthumbnail; width: 256; height: 256; fillMode: Image.PreserveAspectFit; source: "image://xrfimage/" + currentframeimage
-                }
+                Image { id:xrfthumbnail; width: 256; height: 256; fillMode: Image.PreserveAspectFit; source: "image://xrfimage/" + currentframeimage }
                 Text { color: "white"; text: url; font.italic: true; font.pointSize: 12; elide: Text.ElideMiddle; anchors.verticalCenter: xrfthumbnail.verticalCenter }
                 Text { color: "white"; text: currentframeno; style: Text.Outline; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }
                 Text { color: "white"; text: "/"+framecount; font.pointSize: 12; anchors.verticalCenter: xrfthumbnail.verticalCenter }

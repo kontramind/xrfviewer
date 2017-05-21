@@ -118,6 +118,9 @@ ApplicationWindow {
             anchors.fill: parent
             model: xrfCineLoopListModel
             delegate: xrfSimpleDelegate
+            spacing: 10
+            orientation: ListView.Vertical
+            verticalLayoutDirection: ListView.TopToBottom
         }
     }
 

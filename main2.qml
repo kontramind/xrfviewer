@@ -100,35 +100,31 @@ ApplicationWindow {
         height: ApplicationWindow.contentItem.height
         color: "blue"
 
-        // Define a delegate component.  A component will be
+        // Define a delegate component. A component will be
         // instantiated for each visible item in the list.
         Component {
             id: xrfSimpleDelegate
             Item {
-                id: wrapper
-                width: ApplicationWindow.overlay.width; height: 256
-                Row {
-                    id: row_wrapper
-                    spacing: 10
-                    Rectangle { id:col_rect_img; width:256; height:256; color: "transparent"; border.color: "yellow";
-                        Image { id:xrfthumbnail; width:250; height:250; anchors.centerIn:col_rect_img; source: "image://xrfimage/" + currentframeimage;  }
+                id: wrapper; width: xrfGridView.cellWidth; height: xrfGridView.cellHeight;
+                Column {
+                    id: row_wrapper; anchors.fill: wrapper; spacing:5
+                    Text { id:col_frmno; color: "white"; text: currentframeno+"/"+framecount; verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter; font.pointSize: 12; anchors.horizontalCenter: parent.horizontalCenter; }
+                    Rectangle { id:col_rect_img; anchors.horizontalCenter: parent.horizontalCenter; width:250; height:250; color: "transparent"; border.color: "transparent";
+                        Image { id:xrfthumbnail; width:parent.width-8; height:parent.height-8; anchors.centerIn:col_rect_img; source: "image://xrfimage/" + currentframeimage;  }
                     }
-                    Text { id:col_url; color: "white"; text: url; font.italic: true; font.pointSize: 12; elide: Text.ElideMiddle; anchors.verticalCenter: col_rect_img.verticalCenter }
-                    Text { id:col_frmno; color: "white"; text: currentframeno; style: Text.Outline; font.pointSize: 12; anchors.verticalCenter: col_rect_img.verticalCenter }
-                    Text { id:col_frmcnt; color: "white"; text: "/"+framecount; font.pointSize: 12; anchors.verticalCenter: col_rect_img.verticalCenter }
+                    Text { id:col_url; color: "white"; text: url; font.italic: true; verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter; font.pointSize: 12; elide: Text.ElideMiddle; anchors.horizontalCenter: parent.horizontalCenter; width: parent.width}
                 }
                 states: State {
                     name: "Current"
-                    when: wrapper.ListView.isCurrentItem
+                    when: wrapper.GridView.isCurrentItem
                     PropertyChanges { target:col_rect_img; border.color: "red"; border.width: 4 }
                     PropertyChanges { target:col_url; color: "black" }
                     PropertyChanges { target:col_frmno; color: "black" }
-                    PropertyChanges { target:col_frmcnt; color: "black" }
                 }
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        wrapper.ListView.view.currentIndex = index
+                        wrapper.GridView.view.currentIndex = index
                         curr_loop_url = col_url.text
                         curr_frame_no = parseInt(col_frmno.text)
                         xrfCineLoopManager.addLoopUrl(col_url.text)
@@ -138,23 +134,19 @@ ApplicationWindow {
             }
         }
         Component {
-            id: highlightBar
-            Rectangle { color: "yellow" }
+            id: highlight
+            Rectangle {
+                width: xrfGridView.cellWidth; height: xrfGridView.cellHeight
+                color: "yellow"; radius: 5
+                x: xrfGridView.currentItem.x
+                y: xrfGridView.currentItem.y
+            }
         }
 
-        ListView {
-            id: xrfModelListView
-            anchors.fill: parent
-            model: xrfCineLoopListModel
-            delegate: xrfSimpleDelegate
-            spacing: 10
-            orientation: ListView.Vertical
-            verticalLayoutDirection: ListView.TopToBottom
-            highlight: highlightBar
-
-//            onCurrentIndexChanged: {
-//                console.log("onCurrentIndexChanged : xrfModelListView.currentIndex :", xrfModelListView.currentIndex)
-//            }
+        GridView {
+            id: xrfGridView; anchors.fill: parent; cellWidth: 300; cellHeight: 300;
+            model: xrfCineLoopListModel; delegate: xrfSimpleDelegate; highlight: highlight
+            highlightFollowsCurrentItem: false
         }
     }
 
@@ -165,13 +157,14 @@ ApplicationWindow {
         FileDialog {
             id: dlg_open
             selectFolder: false
-            title: "Select an image"
+            title: "Select loop"
             nameFilters: ["*.dcm"]
             onAccepted: {
                 xrfCineLoopManager.addLoopUrl(dlg_open.fileUrl)
                 curr_loop_url = dlg_open.fileUrl
                 curr_frame_no = 0
                 xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
+                xrfGridView.currentIndex = xrfCineLoopManager.getModelIndex(curr_loop_url)
             }
             onRejected: {
                 main_timer.running = true
@@ -196,14 +189,17 @@ ApplicationWindow {
                 dlg_open.open()
                 break;
             case Qt.Key_Right:
+                if(rect_model.visible) return
                 main_timer.running = false
                 nextimage()
                 break;
             case Qt.Key_Left:
+                if(rect_model.visible) return
                 main_timer.running = false
                 previmage()
                 break;
             case Qt.Key_I:
+                if(rect_model.visible) return
                 rect_hdr.visible = !rect_hdr.visible
                 rect_info.visible = !rect_info.visible
                 break;
@@ -212,7 +208,13 @@ ApplicationWindow {
                 rect_model.visible = !rect_model.visible
                 rect_hdr.visible = !rect_model.visible
                 rect_info.visible = false
-                xrfModelListView.currentIndex = xrfCineLoopManager.getModelIndex(curr_loop_url)
+                if(rect_model.visible) {
+                    xrfGridView.currentIndex = xrfCineLoopManager.getModelIndex(curr_loop_url)
+                } else {
+                    curr_loop_url = xrfCineLoopListModel.get(xrfGridView.currentIndex).url
+                    curr_frame_no = xrfCineLoopListModel.get(xrfGridView.currentIndex).currentframeno
+                    xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
+                }
                 break;
             default:
                 break;

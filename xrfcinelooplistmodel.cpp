@@ -107,6 +107,20 @@ static QString  get_filepath(const QUrl& loop_url) {
         return mUrltoIndex[url_loop];
     }
 
+    QVariantMap CineLoopListModel::get(int row) {
+        QHash<int,QByteArray> names = roleNames();
+        QHashIterator<int, QByteArray> i(names);
+        QVariantMap res;
+        while (i.hasNext()) {
+            i.next();
+            QModelIndex idx = index(row, 0);
+            QVariant data = idx.data(i.key());
+            res[i.value()] = data;
+            //cout << i.key() << ": " << i.value() << endl;
+        }
+        return res;
+    }
+
     QImage CineLoopListModel::GetCurrentFrame(const std::string &url_loop)
     {
         CineLoopMap::iterator cit = mCineLoopMap.find(url_loop);

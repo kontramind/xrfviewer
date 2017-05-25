@@ -33,6 +33,8 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         void IncrementCurrentFrameNoForAllLoops();
 
         int GetModelIndex(const QUrl& url_loop);
+        Q_INVOKABLE QVariantMap get(int index);
+
     public slots:
         void addLoopUrl(const QUrl& url_loop);
         bool contains(const std::string &url_loop) const;

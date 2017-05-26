@@ -28,6 +28,9 @@ namespace xrf {
         return mLoop->GetFrames().at(mCurrentFrmNo);
     }
 
+    const int CineLoopRef::CineRate() const {
+        return mLoop->GetDcmValues()[CINE_RATE].toInt();
+    }
     const int CineLoopRef::FrameDisplayRate() const {
         return mLoop->GetDcmValues()[RECOMMENDED_DISPLAY_FRAME_RATE].toInt();
     }

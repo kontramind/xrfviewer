@@ -157,9 +157,13 @@ static QString  get_filepath(const QUrl& loop_url) {
     }
     int CineLoopListModel::loopFrameDisplayRate(const std::string& url_loop) const {
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);
-        if(cit == mCineLoopMap.cend())
+        if(cit == mCineLoopMap.cend()) {
             return 1;
-        return cit->second.FrameDisplayRate();
+        } else {
+            auto cinerate = cit->second.CineRate();
+            auto framedisplayrate = cit->second.FrameDisplayRate();
+            return framedisplayrate > cinerate ? framedisplayrate : cinerate;
+        }
     }
     QString CineLoopListModel::loopDcmTagValuesHtml(const std::string &url_loop) const {
         CineLoopMap::const_iterator cit = mCineLoopMap.find(url_loop);

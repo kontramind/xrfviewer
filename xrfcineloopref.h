@@ -15,6 +15,7 @@ public:
 
     const QUrl Url() const;
     const int FrameCount() const;
+    const int CineRate() const;
     const int FrameDisplayRate() const;
     const xrf::CineLoop* CineLoop() const;
     const DcmTagValues& GetDcmValues() const;

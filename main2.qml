@@ -138,8 +138,9 @@ ApplicationWindow {
             Rectangle {
                 width: xrfGridView.cellWidth; height: xrfGridView.cellHeight
                 color: "yellow"; radius: 5
-                x: xrfGridView.currentItem.x
-                y: xrfGridView.currentItem.y
+                // check if currentindex exist at all
+                x: xrfGridView.currentIndex != -1 ? xrfGridView.currentItem.x : 0
+                y: xrfGridView.currentIndex != -1 ? xrfGridView.currentItem.y : 0
             }
         }
 
@@ -172,10 +173,21 @@ ApplicationWindow {
         }
         Image {
             id: xrf_img
-            cache: false
+            cache: true
             anchors.fill: parent
             fillMode: Image.PreserveAspectFit
             source: "image://xrfimage/" + curr_loop_url + "#" + curr_frame_no
+        }
+        Image {
+            id: xrf_img_rcv
+            cache: true
+            width: 64*2
+            height: 64*2
+            visible: false
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            fillMode: Image.PreserveAspectFit
+            source: "image://xrfimage/" + curr_loop_url + "#" + 0
         }
 
         Keys.onSpacePressed: {
@@ -209,11 +221,15 @@ ApplicationWindow {
                 rect_hdr.visible = !rect_model.visible
                 rect_info.visible = false
                 if(rect_model.visible) {
+                    xrf_img_rcv.visible = false
                     xrfGridView.currentIndex = xrfCineLoopManager.getModelIndex(curr_loop_url)
+                } else if(xrfGridView.currentIndex != -1) {
+                        curr_loop_url = xrfCineLoopListModel.get(xrfGridView.currentIndex).url
+                        curr_frame_no = xrfCineLoopListModel.get(xrfGridView.currentIndex).currentframeno
+                        xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
                 } else {
-                    curr_loop_url = xrfCineLoopListModel.get(xrfGridView.currentIndex).url
-                    curr_frame_no = xrfCineLoopListModel.get(xrfGridView.currentIndex).currentframeno
-                    xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
+                    curr_loop_url = "";
+                    curr_frame_no = 0;
                 }
                 break;
             default:
@@ -241,7 +257,13 @@ ApplicationWindow {
 
     Connections {
         target: xrfCineLoopRcv
-        onCineLoopReceived: xrfCineLoopManager.addLoopUrl("file:///"+fullpath)
+        onCineLoopReceived: {
+            if(!xrfCineLoopManager.contains("file:///"+fullpath)) {
+                xrfCineLoopManager.addLoopUrl("file:///"+fullpath)
+                xrf_img_rcv.source = "image://xrfimage/" + "file:///"+fullpath + "#" + 0
+                xrf_img_rcv.visible = true
+            }
+        }
     }
     Component.onCompleted: {
         xrfCineLoopRcv.init();

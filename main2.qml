@@ -10,7 +10,7 @@ ApplicationWindow {
     height: 480*2
     title: qsTr("XRF Cine Loop Viewer")
 
-    property int commonDisplayFrameRate: 10
+    property int commonDisplayFrameRate: 5
     property int curr_frame_no: 0
     property string curr_loop_url: ""
     function nextimage() {
@@ -110,7 +110,7 @@ ApplicationWindow {
                     id: row_wrapper; anchors.fill: wrapper; spacing:5
                     Text { id:col_frmno; color: "white"; text: currentframeno+"/"+framecount; verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter; font.pointSize: 12; anchors.horizontalCenter: parent.horizontalCenter; }
                     Rectangle { id:col_rect_img; anchors.horizontalCenter: parent.horizontalCenter; width:250; height:250; color: "transparent"; border.color: "transparent";
-                        Image { id:xrfthumbnail; width:parent.width-8; height:parent.height-8; anchors.centerIn:col_rect_img; source: "image://xrfimage/" + currentframeimage;  }
+                        Image { id:xrfthumbnail; cache: true; width:parent.width-8; height:parent.height-8; anchors.centerIn:col_rect_img; source: "image://xrfimage/" + currentframeimage;  }
                     }
                     Text { id:col_url; color: "white"; text: url; font.italic: true; verticalAlignment: Text.AlignVCenter; horizontalAlignment: Text.AlignHCenter; font.pointSize: 12; elide: Text.ElideMiddle; anchors.horizontalCenter: parent.horizontalCenter; width: parent.width}
                 }
@@ -145,7 +145,8 @@ ApplicationWindow {
         }
 
         GridView {
-            id: xrfGridView; anchors.fill: parent; cellWidth: 300; cellHeight: 300;
+            id: xrfGridView;
+            clip: true; anchors.fill: parent; cellWidth: 300; cellHeight: 300;
             model: xrfCineLoopListModel; delegate: xrfSimpleDelegate; highlight: highlight
             highlightFollowsCurrentItem: false
         }

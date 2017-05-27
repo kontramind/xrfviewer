@@ -18,6 +18,7 @@ HEADERS += \
     xrfcinelooplistmodel.h \
     ../xrfdump/xrfcineloop.h \
     ../xrfdump/xrfdcmdeftag.h \
+    ../xrfrcv/xrfcinelooprcv.h
 
 SOURCES += main.cpp \
     xrfcineloopref.cpp \
@@ -26,6 +27,7 @@ SOURCES += main.cpp \
     xrfcinelooplistmodel.cpp \
     ../xrfdump/xrfcineloop.cpp \
     ../xrfdump/xrfdcmutils.cpp \
+    ../xrfrcv/xrfcinelooprcv.cpp
 
 
 RESOURCES += qml.qrc

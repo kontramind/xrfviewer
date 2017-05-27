@@ -5,6 +5,7 @@
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlApplicationEngine>
 
+#include "xrfcinelooprcv.h"
 #include "xrfimageprovider.h"
 #include "xrfcineloopmanager.h"
 
@@ -18,11 +19,12 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     QQmlContext* context = engine.rootContext();
-
     auto xrfCineLoopManager = new xrf::CineLoopManager();
     auto xrfImageProvider = new xrf::ImageProvider(&engine, xrfCineLoopManager);
+    auto xrfCineLoopRcv = new xrf::CineLoopRcv("C:/dev/data/received/", ".dcm", 104);
     engine.addImageProvider("xrfimage", xrfImageProvider);
     context->setContextProperty("xrfImageProvider", xrfImageProvider);
+    context->setContextProperty("xrfCineLoopRcv", xrfCineLoopRcv);
     context->setContextProperty("xrfCineLoopManager", xrfCineLoopManager);
     context->setContextProperty("xrfCineLoopListModel", xrfCineLoopManager->model());
 

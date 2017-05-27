@@ -4,12 +4,14 @@ TEMPLATE     = app
 TARGET       = xrfviewer
 
 
-INCLUDEPATH += ../xrfdump \
-               C:/dev/dcmtk/install/include \
+INCLUDEPATH +=  ../xrfrcv \
+                ../xrfdump \
+                C:/dev/dcmtk/install/include \
+                C:/dev/dcmtk/ext/libzlib/include \
 
 LIBS += -lwsock32 -ladvapi32 -lnetapi32 \
         -LC:/dev/dcmtk/ext/support/zlib/lib -lzlib_d \
-        -LC:/dev/dcmtk/install/lib -lofstd -loflog -ldcmdata -ldcmimgle \
+        -LC:/dev/dcmtk/install/lib -lofstd -loflog -ldcmdata -ldcmimgle -ldcmnet \
 
 HEADERS += \
     xrfcineloopref.h \
@@ -18,7 +20,7 @@ HEADERS += \
     xrfcinelooplistmodel.h \
     ../xrfdump/xrfcineloop.h \
     ../xrfdump/xrfdcmdeftag.h \
-    ../xrfrcv/xrfcinelooprcv.h
+    ../xrfrcv/xrfcinelooprcv.h \
 
 SOURCES += main.cpp \
     xrfcineloopref.cpp \
@@ -27,7 +29,7 @@ SOURCES += main.cpp \
     xrfcinelooplistmodel.cpp \
     ../xrfdump/xrfcineloop.cpp \
     ../xrfdump/xrfdcmutils.cpp \
-    ../xrfrcv/xrfcinelooprcv.cpp
+    ../xrfrcv/xrfcinelooprcv.cpp \
 
 
 RESOURCES += qml.qrc

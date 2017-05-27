@@ -239,6 +239,19 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: xrfCineLoopRcv
+        onCineLoopReceived: xrfCineLoopManager.addLoopUrl("file:///"+fullpath)
+    }
+    Component.onCompleted: {
+        xrfCineLoopRcv.init();
+        xrfCineLoopRcv.start();
+    }
+    Component.onDestruction: {
+        xrfCineLoopRcv.stop();
+        xrfCineLoopRcv.wait(10*10000)
+    }
+
     footer: Button {
         id: bt_open
         text: "Open"

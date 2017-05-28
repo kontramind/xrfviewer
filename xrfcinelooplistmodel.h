@@ -36,6 +36,7 @@ using CineLoopMap = std::unordered_map<std::string, CineLoopRef>;
         Q_INVOKABLE QVariantMap get(int index);
 
         void dropAllLoopUrl();
+        void dropLoopRcv(const QUrl& url_loop);
     public slots:
         void addLoopUrl(const QUrl& url_loop);
         bool contains(const std::string &url_loop) const;

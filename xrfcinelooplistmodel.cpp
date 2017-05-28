@@ -26,6 +26,25 @@ static QString  get_filepath(const QUrl& loop_url) {
         mUrltoIndex.clear();
         endRemoveRows();
     }
+    void CineLoopListModel::dropLoopRcv(const QUrl& url_loop) {
+        if(!mUrltoIndex.contains(url_loop))
+            return;
+        if(mUrltoIndex.size() == 1) {
+            dropAllLoopUrl();
+            return;
+        }
+        auto index = mUrltoIndex[url_loop];
+        beginRemoveRows(QModelIndex(), index, index);
+        auto listIt = mLoopUrlList.begin();
+        while(listIt != mLoopUrlList.end())
+            if(*listIt == url_loop)
+                listIt = mLoopUrlList.erase(listIt);
+            else
+                listIt++;
+        mCineLoopMap.erase(url_loop.toString().toStdString());
+        mUrltoIndex.remove(url_loop);
+        endRemoveRows();
+    }
 
     void CineLoopListModel::addLoopUrl(const QUrl& url_loop) {
         if(mUrltoIndex.contains(url_loop))

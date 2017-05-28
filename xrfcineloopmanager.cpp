@@ -37,6 +37,9 @@ std::string get_url_no_fragment(const QUrl& loop_url) {
     void CineLoopManager::dropAllLoopRcv() {
         mModelRcv->dropAllLoopUrl();
     }
+    void CineLoopManager::dropLoopRcv(const QUrl& url_loop){
+        mModelRcv->dropLoopRcv(url_loop);
+    }
 
     int CineLoopManager::loopFrameCount(const QUrl& url_loop) const {
         auto count = mModel->loopFrameCount(get_url_no_fragment(url_loop));

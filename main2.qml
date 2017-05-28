@@ -198,16 +198,21 @@ ApplicationWindow {
             Item {
                 id: wrapper_rcv; width: 128; height: 128
                 Image { id:xrfthumbnail_rcv; cache: true; anchors.fill: parent; source: "image://xrfimage/" + currentframeimage;  }
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onClicked: {
-//                        wrapper.GridView.view.currentIndex = index
-//                        curr_loop_url = col_url.text
-//                        curr_frame_no = parseInt(col_frmno.text)
-//                        xrfCineLoopManager.addLoopUrl(col_url.text)
-//                        xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
-//                    }
-//                }
+                MouseArea {
+                    anchors.fill: wrapper_rcv
+                    onClicked: {
+                        main_timer.running = false
+                        wrapper_rcv.ListView.view.currentIndex = index
+                        if(wrapper_rcv.ListView.view.currentIndex !== -1 && url.length !== 0) {
+                            curr_loop_url = url
+                            curr_frame_no = parseInt(currentframeno)
+                            xrfCineLoopManager.dropLoopRcv(curr_loop_url)
+                            xrfCineLoopManager.addLoopUrl(curr_loop_url)
+                            xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
+
+                        }
+                    }
+                }
             }
         }
 

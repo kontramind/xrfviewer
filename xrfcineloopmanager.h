@@ -29,6 +29,7 @@ class CineLoopListModel;
         Q_INVOKABLE void addLoopUrl(const QUrl& url_loop);
         Q_INVOKABLE void addLoopRcv(const QUrl& url_loop);
         Q_INVOKABLE void dropAllLoopRcv();
+        Q_INVOKABLE void dropLoopRcv(const QUrl& url_loop);
         Q_INVOKABLE bool contains(const QUrl &url_loop) const;
         Q_INVOKABLE int loopFrameCount(const QUrl& url_loop) const;
         Q_INVOKABLE int loopCurrentFrameNo(const QUrl& url_loop) const;

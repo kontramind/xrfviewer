@@ -36,5 +36,6 @@
         <file>images/image_9.png</file>
         <file>xrfimageprovider.cpp</file>
         <file>xrfimageprovider.h</file>
+        <file>config.ini</file>
     </qresource>
 </RCC>

@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     context->setContextProperty("xrfCineLoopRcv", xrfCineLoopRcv);
     context->setContextProperty("xrfCineLoopManager", xrfCineLoopManager);
     context->setContextProperty("xrfCineLoopListModel", xrfCineLoopManager->model());
+    context->setContextProperty("xrfCineLoopListModelRcv", xrfCineLoopManager->modelrcv());
 
 //    QUrl picturesLocationUrl = QUrl::fromLocalFile(QDir::currentPath());
 //    context->setContextProperty(QStringLiteral("contextPicturesLocation"), picturesLocationUrl);

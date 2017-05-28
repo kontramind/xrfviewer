@@ -19,6 +19,14 @@ static QString  get_filepath(const QUrl& loop_url) {
     CineLoopListModel::CineLoopListModel(CineLoopManager *manager, QObject *parent)
         : QAbstractListModel(parent), mManager(manager) {}
 
+    void CineLoopListModel::dropAllLoopUrl() {
+        beginRemoveRows(QModelIndex(), 0, rowCount());
+        mLoopUrlList.clear();
+        mCineLoopMap.clear();
+        mUrltoIndex.clear();
+        endRemoveRows();
+    }
+
     void CineLoopListModel::addLoopUrl(const QUrl& url_loop) {
         if(mUrltoIndex.contains(url_loop))
             return;

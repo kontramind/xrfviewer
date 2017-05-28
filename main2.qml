@@ -179,16 +179,36 @@ ApplicationWindow {
             fillMode: Image.PreserveAspectFit
             source: "image://xrfimage/" + curr_loop_url + "#" + curr_frame_no
         }
-        Image {
-            id: xrf_img_rcv
-            cache: true
-            width: 64*2
-            height: 64*2
-            visible: false
-            anchors.right: parent.right
+
+        ListView {
+            id:xrfListViewReceived
+            clip: true
+            spacing: 1
+            height: 128
+            visible: true
+            width: parent.width
             anchors.bottom: parent.bottom
-            fillMode: Image.PreserveAspectFit
-            source: "image://xrfimage/" + curr_loop_url + "#" + 0
+            model: xrfCineLoopListModelRcv
+            delegate: xrfReceivedDelegate
+            orientation: Qt.Horizontal
+            layoutDirection: Qt.LeftToRight
+        }
+        Component {
+            id: xrfReceivedDelegate
+            Item {
+                id: wrapper_rcv; width: 128; height: 128
+                Image { id:xrfthumbnail_rcv; cache: true; anchors.fill: parent; source: "image://xrfimage/" + currentframeimage;  }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    onClicked: {
+//                        wrapper.GridView.view.currentIndex = index
+//                        curr_loop_url = col_url.text
+//                        curr_frame_no = parseInt(col_frmno.text)
+//                        xrfCineLoopManager.addLoopUrl(col_url.text)
+//                        xrfCineLoopManager.setCurrentFrameNo(curr_loop_url, curr_frame_no)
+//                    }
+//                }
+            }
         }
 
         Keys.onSpacePressed: {
@@ -222,7 +242,7 @@ ApplicationWindow {
                 rect_hdr.visible = !rect_model.visible
                 rect_info.visible = false
                 if(rect_model.visible) {
-                    xrf_img_rcv.visible = false
+                    xrfCineLoopManager.dropAllLoopRcv()
                     xrfGridView.currentIndex = xrfCineLoopManager.getModelIndex(curr_loop_url)
                 } else if(xrfGridView.currentIndex != -1) {
                         curr_loop_url = xrfCineLoopListModel.get(xrfGridView.currentIndex).url
@@ -261,8 +281,7 @@ ApplicationWindow {
         onCineLoopReceived: {
             if(!xrfCineLoopManager.contains("file:///"+fullpath)) {
                 xrfCineLoopManager.addLoopUrl("file:///"+fullpath)
-                xrf_img_rcv.source = "image://xrfimage/" + "file:///"+fullpath + "#" + 0
-                xrf_img_rcv.visible = true
+                xrfCineLoopManager.addLoopRcv("file:///"+fullpath)
             }
         }
     }

@@ -25,7 +25,10 @@ class CineLoopListModel;
         CineLoopManager(QObject *parent = 0);
 
         CineLoopListModel* model();
+        CineLoopListModel* modelrcv();
         Q_INVOKABLE void addLoopUrl(const QUrl& url_loop);
+        Q_INVOKABLE void addLoopRcv(const QUrl& url_loop);
+        Q_INVOKABLE void dropAllLoopRcv();
         Q_INVOKABLE bool contains(const QUrl &url_loop) const;
         Q_INVOKABLE int loopFrameCount(const QUrl& url_loop) const;
         Q_INVOKABLE int loopCurrentFrameNo(const QUrl& url_loop) const;
@@ -48,6 +51,7 @@ class CineLoopListModel;
         QImage GetFrame(const QUrl& url_loop, int frameNo);
 
         std::unique_ptr<CineLoopListModel> mModel{nullptr};
+        std::unique_ptr<CineLoopListModel> mModelRcv{nullptr};
     };
 }
 
